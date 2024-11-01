@@ -1,10 +1,10 @@
 setup() {
   script_directory="$(dirname "$0")"
-  if ! source "$script_directory/command_runner_unit_tests.sh"; then
+  if ! source "$script_directory/unit_tests.sh"; then
     echo >&2 -e "\e[1;31mFAILED\e[0m"
     return 1
   fi
-  if ! source "$script_directory/command_runner_api_tests.sh"; then
+  if ! source "$script_directory/api_tests.sh"; then
     echo >&2 -e "\e[1;31mFAILED\e[0m"
     return 1
   fi

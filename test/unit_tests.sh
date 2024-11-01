@@ -122,7 +122,7 @@ summary_test_suite() {
 
 nested_runner_test_suite() {
   any_test_failed=0
-  script_using_runner="$script_directory/command_runner_test_client.sh"
+  script_using_runner="$script_directory/test_client.sh"
   expect summary "$(echo -e "\nOverall Results:\n$script_using_runner PASSED")" "$script_using_runner" 0
   return "$any_test_failed"
 }
