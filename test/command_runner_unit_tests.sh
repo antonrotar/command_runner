@@ -9,6 +9,7 @@ setup() {
   command_runner_set_colored_output 0
   return 0
 }
+
 add_commands() {
   if [ "$#" -lt 2 ]; then
     return 0
@@ -19,6 +20,7 @@ add_commands() {
   add_commands "$@"
   return 0
 }
+
 check_result() {
   if [[ ! "$1" == "$2" ]]; then
     any_test_failed=1
@@ -27,6 +29,7 @@ check_result() {
   fi
   return 0
 }
+
 expect() {
   local hook="$1"
   local expected_result="$2"
@@ -39,36 +42,43 @@ expect() {
   check_result "$result" "$expected_result" "$test"
   return 0
 }
+
 exit_code() {
   command_runner_run_commands >/dev/null
   command_runner_validate
   result="$?"
   return 0
 }
+
 output() {
   result="$(command_runner_run_commands 2>&1)"
   return 0
 }
+
 verbose_output() {
   command_runner_set_verbose 1
   result="$(command_runner_run_commands 2>&1)"
   return 0
 }
+
 streamed_output() {
   command_runner_set_streamed 1
   result="$(command_runner_run_commands 2>&1)"
   return 0
 }
+
 errors_output() {
   command_runner_run_commands >/dev/null
   result="$(command_runner_print_errors 2>&1)"
   return 0
 }
+
 summary() {
   command_runner_run_commands >/dev/null
   result="$(command_runner_print_summary 2>&1)"
   return 0
 }
+
 exit_code_test_suite() {
   local pass=0
   local fail=1
@@ -81,6 +91,7 @@ exit_code_test_suite() {
   expect exit_code "$fail" "exit 0" 0 "exit 42" 0
   return "$any_test_failed"
 }
+
 output_test_suite() {
   local passing_output="Hello"
   local passing_command="echo $passing_output;exit 0"
@@ -98,6 +109,7 @@ output_test_suite() {
   expect errors_output "$(echo -e "Errors:\nError executing: $failing_command\nOutput:\n$failing_output\n")" "$failing_command" 0 "$passing_command" 0
   return "$any_test_failed"
 }
+
 summary_test_suite() {
   local passing_command="echo Hello;exit 0"
   local failing_command="echo Hello;exit 42"
@@ -107,6 +119,7 @@ summary_test_suite() {
   expect summary "$(echo -e "\nOverall Results:\n$passing_command PASSED\n$failing_command FAILED")" "$passing_command" 0 "$failing_command" 0
   return "$any_test_failed"
 }
+
 nested_runner_test_suite() {
   any_test_failed=0
   script_using_runner="$script_directory/command_runner_test_client.sh"
