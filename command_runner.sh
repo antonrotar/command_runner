@@ -11,18 +11,22 @@ command_runner_reset() {
   commands_valid=1
   return 0
 }
+
 command_runner_set_colored_output() {
   colored_output="$1"
   return 0
 }
+
 command_runner_set_verbose() {
   verbose="$1"
   return 0
 }
+
 command_runner_set_streamed() {
   streamed="$1"
   return 0
 }
+
 command_runner_add() {
   if [ ! "$#" -eq 1 ]; then
     _print_colored "1;31m" "FAILED: command_runner_add $@"
@@ -33,6 +37,7 @@ command_runner_add() {
   expected_results+=(0)
   return 0
 }
+
 command_runner_add_specific() {
   if [ ! "$#" -eq 2 ]; then
     _print_colored "1;31m" "FAILED: command_runner_add_specific $@"
@@ -43,6 +48,7 @@ command_runner_add_specific() {
   expected_results+=("$2")
   return 0
 }
+
 _print_colored() {
   local color="$1"
   shift
@@ -53,22 +59,27 @@ _print_colored() {
   fi
   return 0
 }
+
 _print_command() {
   _print_colored "0;36m" "$1"
   return 0
 }
+
 _print_info() {
   _print_colored "1;96m" "$1"
   return 0
 }
+
 _print_passed() {
   _print_colored "0;32m" "PASSED"
   return 0
 }
+
 _print_failed() {
   _print_colored "1;31m" "FAILED"
   return 0
 }
+
 _run_command_and_store_result() {
   _print_command "$1"
   if [ "$streamed" -eq 1 ]; then
@@ -84,18 +95,21 @@ _run_command_and_store_result() {
   fi
   return 0
 }
+
 command_runner_check_commands() {
   if [ "$commands_valid" -eq 1 ]; then
     return 0
   fi
   return 1
 }
+
 command_runner_run_commands() {
   for i in "${!commands[@]}"; do
     _run_command_and_store_result "${commands[$i]}"
   done
   return 0
 }
+
 command_runner_validate() {
   for i in "${!results[@]}"; do
     if [ ! "${results[$i]}" -eq "${expected_results[$i]}" ]; then
@@ -104,6 +118,7 @@ command_runner_validate() {
   done
   return 0
 }
+
 command_runner_print_errors() {
   _print_info "Errors:"
   for i in "${!results[@]}"; do
@@ -116,6 +131,7 @@ command_runner_print_errors() {
   done
   return 0
 }
+
 command_runner_print_summary() {
   echo
   _print_info "Overall Results:"
@@ -128,6 +144,7 @@ command_runner_print_summary() {
   done
   return 0
 }
+
 command_runner_run() {
   command_runner_check_commands && command_runner_run_commands && command_runner_print_errors && command_runner_print_summary && command_runner_validate
 }
