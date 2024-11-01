@@ -118,7 +118,7 @@ nested_runner_test_suite(){
 
 setup_unit_tests(){
     script_directory="$(dirname "$0")"
-    if ! source "$script_directory/command_runner.sh"
+    if ! source "$script_directory/../command_runner.sh"
     then
         return 1
     fi
