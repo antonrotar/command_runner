@@ -38,9 +38,9 @@ command_runner_add() {
   return 0
 }
 
-command_runner_add_specific() {
+command_runner_add_with_expectation() {
   if [ ! "$#" -eq 2 ]; then
-    _print_colored "1;31m" "FAILED: command_runner_add_specific $@"
+    _print_colored "1;31m" "FAILED: command_runner_add_with_expectation $@"
     commands_valid=0
     return 1
   fi

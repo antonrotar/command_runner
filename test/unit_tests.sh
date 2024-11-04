@@ -14,7 +14,7 @@ add_commands() {
   if [ "$#" -lt 2 ]; then
     return 0
   fi
-  command_runner_add_specific "$1" "$2"
+  command_runner_add_with_expectation "$1" "$2"
   shift
   shift
   add_commands "$@"
