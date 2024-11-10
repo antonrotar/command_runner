@@ -7,8 +7,8 @@ if ! "$script_directory/commands_test.sh"; then
   exit 1
 fi
 
-if ! "$script_directory/example_test.sh"; then
-  echo "Example tests should pass but fail."
+if ! "$script_directory/examples_test.sh"; then
+  echo "Examples tests should pass but fail."
   exit 1
 fi
 
