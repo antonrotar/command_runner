@@ -134,7 +134,7 @@ command_runner_run_invalid_commands_suite() {
 
 setup_api_tests() {
   script_directory="$(dirname "$0")"
-  if ! source "$script_directory/../command_runner.sh"; then
+  if ! source "$script_directory/../../command_runner.sh"; then
     return 1
   fi
   return 0
