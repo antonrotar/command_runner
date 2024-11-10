@@ -1,7 +1,7 @@
 #!/bin/bash
 
 script_directory="$(dirname "$0")"
-if ! source "$script_directory/../command_runner.sh"; then
+if ! source "$script_directory/../../command_runner.sh"; then
   exit 1
 fi
 
