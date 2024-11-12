@@ -23,7 +23,7 @@ command_runner_fails_if_no_command() {
 
 command_runner_add_fails_if_too_many_arguments() {
   setup
-  if command_runner_add "a" "b" "c"; then
+  if command_runner_add "a" "b"; then
     echo "command_runner_add_fails_if_too_many_arguments failed"
     return 1
   fi
