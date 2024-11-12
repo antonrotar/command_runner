@@ -57,22 +57,38 @@ command_runner_set_streamed() {
 }
 
 command_runner_add() {
-  if [ ! "$#" -eq 1 ]; then
-    _print_colored "1;31m" "FAILED: command_runner_add $@"
+  if [ "$#" -eq 0 ]; then
+    echo -e "$(_print_failed)" "command_runner_add $@"
+    echo "Please provide a command."
     commands_valid=0
     return 1
   fi
+  if [ ! "$#" -eq 1 ]; then
+    echo -e "$(_print_failed)" "command_runner_add $@"
+    echo "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation."
+    commands_valid=0
+    return 1
+  fi
+
   commands+=("$1")
   expected_results+=(0)
   return 0
 }
 
 command_runner_add_with_expectation() {
-  if [ ! "$#" -eq 2 ]; then
-    _print_colored "1;31m" "FAILED: command_runner_add_with_expectation $@"
+  if [ "$#" -eq 0 ]; then
+    echo -e "$(_print_failed)" "command_runner_add_with_expectation $@"
+    echo "Please provide a command."
     commands_valid=0
     return 1
   fi
+  if [ ! "$#" -eq 2 ]; then
+    echo -e "$(_print_failed)" "command_runner_add_with_expectation $@"
+    echo "Please provide exactly one expectation."
+    commands_valid=0
+    return 1
+  fi
+
   commands+=("$1")
   expected_results+=("$2")
   return 0
