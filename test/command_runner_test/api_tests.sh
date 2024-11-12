@@ -12,10 +12,10 @@ command_runner_add_successful() {
   return 0
 }
 
-command_runner_add_fails_if_not_enough_arguments() {
+command_runner_fails_if_no_command() {
   setup
   if command_runner_add; then
-    echo "command_runner_add_fails_if_not_enough_arguments failed"
+    echo "command_runner_fails_if_no_command failed"
     return 1
   fi
   return 0
@@ -111,7 +111,7 @@ command_runner_run_with_invalid_commands_fails() {
 
 command_runner_add_suite() {
   command_runner_add_successful &&
-    command_runner_add_fails_if_not_enough_arguments &&
+    command_runner_fails_if_no_command &&
     command_runner_add_fails_if_too_many_arguments
 }
 
