@@ -39,6 +39,15 @@ command_runner_add_with_expectation_successful() {
   return 0
 }
 
+command_runner_add_with_expectation_fails_if_no_command() {
+  setup
+  if command_runner_add_with_expectation; then
+    echo "command_runner_add_with_expectation_fails_if_no_command failed"
+    return 1
+  fi
+  return 0
+}
+
 command_runner_add_with_expectation_fails_if_not_enough_arguments() {
   setup
   if command_runner_add_with_expectation "b"; then
@@ -117,6 +126,7 @@ command_runner_add_suite() {
 
 command_runner_add_with_expectation_suite() {
   command_runner_add_with_expectation_successful &&
+    command_runner_add_with_expectation_fails_if_no_command &&
     command_runner_add_with_expectation_fails_if_not_enough_arguments &&
     command_runner_add_with_expectation_fails_if_too_many_arguments
 }
