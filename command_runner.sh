@@ -106,22 +106,26 @@ _print_colored() {
 }
 
 _print_command() {
-  _print_colored "0;36m" "$1"
+  local normal_cyan="0;36m"
+  _print_colored "$normal_cyan" "$1"
   return 0
 }
 
 _print_info() {
-  _print_colored "1;96m" "$1"
+  local bold_light_cyan="1;96m"
+  _print_colored "$bold_light_cyan" "$1"
   return 0
 }
 
 _print_passed() {
-  _print_colored "0;32m" "PASSED"
+  local normal_green="0;32m"
+  _print_colored "$normal_green" "PASSED"
   return 0
 }
 
 _print_failed() {
-  _print_colored "1;31m" "FAILED"
+  local bold_red="1;31m"
+  _print_colored "$bold_red" "FAILED"
   return 0
 }
 
