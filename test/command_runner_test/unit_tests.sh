@@ -99,14 +99,14 @@ output_test_suite() {
   local failing_output="Fail"
   local failing_command="echo $failing_output;exit 1"
   any_test_failed=0
-  expect verbose_output "$(echo -e "$passing_command\n$passing_output")" "$passing_command" 0
-  expect streamed_output "$(echo -e "$passing_command\n$passing_output")" "$passing_command" 0
-  expect output "$passing_command" "$passing_command" 0
-  expect output "$(echo -e "$passing_command\n$passing_command_2")" "$passing_command" 0 "$passing_command_2" 0
+  expect verbose_output "$(echo -e "$passing_command 0\n$passing_output")" "$passing_command" 0
+  expect streamed_output "$(echo -e "$passing_command 0\n$passing_output")" "$passing_command" 0
+  expect output "$passing_command 0" "$passing_command" 0
+  expect output "$(echo -e "$passing_command 0\n$passing_command_2 0")" "$passing_command" 0 "$passing_command_2" 0
   expect errors_output "$(echo -e "Errors:")" "$passing_command" 0
   expect errors_output "$(echo -e "Errors:")" "$passing_command" 0 "$passing_command_2" 0
-  expect errors_output "$(echo -e "Errors:\nError executing: $failing_command\nOutput:\n$failing_output\n")" "$failing_command" 0
-  expect errors_output "$(echo -e "Errors:\nError executing: $failing_command\nOutput:\n$failing_output\n")" "$failing_command" 0 "$passing_command" 0
+  expect errors_output "$(echo -e "Errors:\nError executing: $failing_command 0\nOutput:\n$failing_output\n")" "$failing_command" 0
+  expect errors_output "$(echo -e "Errors:\nError executing: $failing_command 0\nOutput:\n$failing_output\n")" "$failing_command" 0 "$passing_command" 0
   return "$any_test_failed"
 }
 
@@ -115,15 +115,15 @@ summary_test_suite() {
   local failing_command="echo Hello;exit 42"
   any_test_failed=0
   expect summary "$(echo -e "\nOverall Results:")"
-  expect summary "$(echo -e "\nOverall Results:\n$passing_command PASSED")" "$passing_command" 0
-  expect summary "$(echo -e "\nOverall Results:\n$passing_command PASSED\n$failing_command FAILED")" "$passing_command" 0 "$failing_command" 0
+  expect summary "$(echo -e "\nOverall Results:\n$passing_command 0 PASSED")" "$passing_command" 0
+  expect summary "$(echo -e "\nOverall Results:\n$passing_command 0 PASSED\n$failing_command 0 FAILED")" "$passing_command" 0 "$failing_command" 0
   return "$any_test_failed"
 }
 
 nested_runner_test_suite() {
   any_test_failed=0
   script_using_runner="$script_directory/test_client.sh"
-  expect summary "$(echo -e "\nOverall Results:\n$script_using_runner PASSED")" "$script_using_runner" 0
+  expect summary "$(echo -e "\nOverall Results:\n$script_using_runner 0 PASSED")" "$script_using_runner" 0
   return "$any_test_failed"
 }
 

@@ -107,7 +107,7 @@ _print_colored() {
 
 _print_command() {
   local normal_cyan="0;36"
-  _print_colored "$normal_cyan" "$1"
+  _print_colored "$normal_cyan" "$@"
   return 0
 }
 
@@ -130,7 +130,7 @@ _print_failed() {
 }
 
 _run_command_and_store_result() {
-  _print_command "$1"
+  _print_command "$@"
   if [ "$streamed" -eq 1 ]; then
     eval "$1"
   else
@@ -154,7 +154,7 @@ command_runner_check_commands() {
 
 command_runner_run_commands() {
   for i in "${!commands[@]}"; do
-    _run_command_and_store_result "${commands[$i]}"
+    _run_command_and_store_result "${commands[$i]}" "${expected_results[$i]}"
   done
   return 0
 }
@@ -172,7 +172,7 @@ command_runner_print_errors() {
   _print_info "Errors:"
   for i in "${!results[@]}"; do
     if [ ! "${results[$i]}" -eq "${expected_results[$i]}" ]; then
-      echo >&2 "$(_print_info "Error executing:")" "${commands[$i]}"
+      echo >&2 "$(_print_info "Error executing:")" "${commands[$i]}" "${expected_results[$i]}"
       echo >&2 "$(_print_info "Output:")"
       echo >&2 "${outputs[$i]}"
       echo >&2
@@ -186,9 +186,9 @@ command_runner_print_summary() {
   _print_info "Overall Results:"
   for i in "${!results[@]}"; do
     if [ "${results[$i]}" -eq "${expected_results[$i]}" ]; then
-      echo -e "${commands[$i]}" "$(_print_passed)"
+      echo -e "${commands[$i]}" "${expected_results[$i]}" "$(_print_passed)"
     else
-      echo -e "${commands[$i]}" "$(_print_failed)"
+      echo -e "${commands[$i]}" "${expected_results[$i]}" "$(_print_failed)"
     fi
   done
   return 0
