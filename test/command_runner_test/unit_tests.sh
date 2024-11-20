@@ -80,6 +80,7 @@ summary() {
 }
 
 exit_code_test_suite() {
+  echo "Running exit_code_test_suite"
   local pass=0
   local fail=1
   any_test_failed=0
@@ -93,6 +94,7 @@ exit_code_test_suite() {
 }
 
 output_test_suite() {
+  echo "Running output_test_suite"
   local passing_output="Hello"
   local passing_command="echo $passing_output;exit 0"
   local passing_command_2="echo World;exit 0"
@@ -111,6 +113,7 @@ output_test_suite() {
 }
 
 summary_test_suite() {
+  echo "Running summary_test_suite"
   local passing_command="echo Hello;exit 0"
   local failing_command="echo Hello;exit 42"
   any_test_failed=0
@@ -121,6 +124,7 @@ summary_test_suite() {
 }
 
 nested_runner_test_suite() {
+  echo "Running nested_runner_test_suite"
   any_test_failed=0
   script_using_runner="$script_directory/test_client.sh"
   expect summary "$(echo -e "\nOverall Results:\n$script_using_runner 0 PASSED")" "$script_using_runner" 0
