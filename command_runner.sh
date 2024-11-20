@@ -98,7 +98,7 @@ _print_colored() {
   local color="$1"
   shift
   if [ "$colored_output" -eq 1 ]; then
-    echo -e "\e[$color$@\e[0m"
+    echo -e "\e["$color"m$@\e[0m"
   else
     echo "$@"
   fi
@@ -106,25 +106,25 @@ _print_colored() {
 }
 
 _print_command() {
-  local normal_cyan="0;36m"
+  local normal_cyan="0;36"
   _print_colored "$normal_cyan" "$1"
   return 0
 }
 
 _print_info() {
-  local bold_light_cyan="1;96m"
+  local bold_light_cyan="1;96"
   _print_colored "$bold_light_cyan" "$1"
   return 0
 }
 
 _print_passed() {
-  local normal_green="0;32m"
+  local normal_green="0;32"
   _print_colored "$normal_green" "PASSED"
   return 0
 }
 
 _print_failed() {
-  local bold_red="1;31m"
+  local bold_red="1;31"
   _print_colored "$bold_red" "FAILED"
   return 0
 }
