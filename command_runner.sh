@@ -195,7 +195,11 @@ command_runner_print_summary() {
 }
 
 command_runner_run() {
-  command_runner_check_commands && command_runner_run_commands && command_runner_print_errors && command_runner_print_summary && command_runner_validate
+  command_runner_check_commands &&
+    command_runner_run_commands &&
+    command_runner_print_errors &&
+    command_runner_print_summary &&
+    command_runner_validate
 }
 
 command_runner_reset
