@@ -131,6 +131,7 @@ _print_failed() {
 
 _run_command_and_store_result() {
   _print_command "$@"
+  local output=""
   if [ "$streamed" -eq 1 ]; then
     eval "$1"
   else
