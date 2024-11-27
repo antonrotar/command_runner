@@ -10,4 +10,4 @@ command_runner_add ./$script_directory/01_simple_example.sh
 command_runner_add ./$script_directory/02_failing_example.sh
 command_runner_add_with_expectation ./$script_directory/02_failing_example.sh 1
 
-command_runner_run
+command_runner_run "$@"

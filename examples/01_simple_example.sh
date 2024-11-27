@@ -9,4 +9,4 @@ source "$script_directory/../command_runner.sh"
 command_runner_add ./$script_directory/commands/passing_command.sh
 command_runner_add ./$script_directory/commands/passing_command.sh
 
-command_runner_run
+command_runner_run "$@"

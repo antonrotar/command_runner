@@ -196,6 +196,17 @@ command_runner_print_summary() {
 }
 
 command_runner_run() {
+
+  if [ "$#" -eq 1 ]; then
+    if [[ "$1" == '-v' ]]; then
+      command_runner_set_verbose 1
+      shift
+    elif [[ "$1" == '-s' ]]; then
+      command_runner_set_streamed 1
+      shift
+    fi
+  fi
+
   command_runner_check_commands &&
     command_runner_run_commands &&
     command_runner_print_errors &&
