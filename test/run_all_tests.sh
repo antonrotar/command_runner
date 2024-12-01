@@ -27,11 +27,9 @@ for TEST in $ALL_TESTS; do
   fi
 done
 
-# Compute statistics.
-NUMBER_OF_TESTS=$(echo $ALL_TESTS | wc -w)
-NUMBER_OF_PASSED_TESTS=${#PASSED_TESTS[@]}
-NUMBER_OF_FAILED_TESTS=${#FAILED_TESTS[@]}
-echo "$NUMBER_OF_PASSED_TESTS/$NUMBER_OF_TESTS tests passed."
+# Print results.
+echo "================="
+echo "$(echo $ALL_TESTS | wc -w) tests executed."
 
 for TEST in "${PASSED_TESTS[@]}"; do
   echo "$TEST PASSED"
