@@ -16,12 +16,14 @@ ALL_TESTS=$(find $TEST_DIRECTORY -name *_test.sh)
 # Execute all tests.
 PASSED_TESTS=()
 FAILED_TESTS=()
+RETURN_VALUE=0
 for TEST in $ALL_TESTS; do
   $TEST
   if [ $? -eq 0 ]; then
     PASSED_TESTS+=($TEST)
   else
     FAILED_TESTS+=($TEST)
+    RETURN_VALUE=1
   fi
 done
 
@@ -39,13 +41,12 @@ if [ "$NUMBER_OF_PASSED_TESTS" -ne 0 ]; then
   done
 fi
 
-# If any tests failed, print them and exit with error.
+# If any tests failed, print them.
 if [ "$NUMBER_OF_FAILED_TESTS" -ne 0 ]; then
   echo "Failed tests:"
   for TEST in "${FAILED_TESTS[@]}"; do
     echo $TEST
   done
-  exit 1
 fi
 
-exit 0
+exit $RETURN_VALUE
