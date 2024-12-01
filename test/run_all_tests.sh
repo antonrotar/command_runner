@@ -1,7 +1,7 @@
 #! /bin/bash -u
 
 # This script executes all *_test.sh files in the given directory (and all subdirectories).
-# All failed tests are printed.
+# All tests are printed sorted by passed/failed.
 # It returns 1 if any test fails.
 
 # Find all tests in given directory.
@@ -13,26 +13,37 @@ else
 fi
 ALL_TESTS=$(find $TEST_DIRECTORY -name *_test.sh)
 
-# Execute all tests. Store failed tests in array.
+# Execute all tests.
+PASSED_TESTS=()
 FAILED_TESTS=()
 for TEST in $ALL_TESTS; do
   $TEST
-  if [ $? -ne 0 ]; then
+  if [ $? -eq 0 ]; then
+    PASSED_TESTS+=($TEST)
+  else
     FAILED_TESTS+=($TEST)
   fi
 done
 
 # Compute statistics.
 NUMBER_OF_TESTS=$(echo $ALL_TESTS | wc -w)
+NUMBER_OF_PASSED_TESTS=${#PASSED_TESTS[@]}
 NUMBER_OF_FAILED_TESTS=${#FAILED_TESTS[@]}
-NUMBER_OF_SUCCESSFUL_TESTS=$((NUMBER_OF_TESTS - NUMBER_OF_FAILED_TESTS))
-echo "$NUMBER_OF_SUCCESSFUL_TESTS/$NUMBER_OF_TESTS tests passed."
+echo "$NUMBER_OF_PASSED_TESTS/$NUMBER_OF_TESTS tests passed."
+
+# If any tests passed, print them.
+if [ "$NUMBER_OF_PASSED_TESTS" -ne 0 ]; then
+  echo "Passed tests:"
+  for TEST in "${PASSED_TESTS[@]}"; do
+    echo $TEST
+  done
+fi
 
 # If any tests failed, print them and exit with error.
 if [ "$NUMBER_OF_FAILED_TESTS" -ne 0 ]; then
   echo "Failed tests:"
-  for FAILED_TEST in "${FAILED_TESTS[@]}"; do
-    echo $FAILED_TEST
+  for TEST in "${FAILED_TESTS[@]}"; do
+    echo $TEST
   done
   exit 1
 fi
