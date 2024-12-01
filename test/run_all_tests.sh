@@ -33,20 +33,12 @@ NUMBER_OF_PASSED_TESTS=${#PASSED_TESTS[@]}
 NUMBER_OF_FAILED_TESTS=${#FAILED_TESTS[@]}
 echo "$NUMBER_OF_PASSED_TESTS/$NUMBER_OF_TESTS tests passed."
 
-# If any tests passed, print them.
-if [ "$NUMBER_OF_PASSED_TESTS" -ne 0 ]; then
-  echo "Passed tests:"
-  for TEST in "${PASSED_TESTS[@]}"; do
-    echo $TEST
-  done
-fi
+for TEST in "${PASSED_TESTS[@]}"; do
+  echo "$TEST PASSED"
+done
 
-# If any tests failed, print them.
-if [ "$NUMBER_OF_FAILED_TESTS" -ne 0 ]; then
-  echo "Failed tests:"
-  for TEST in "${FAILED_TESTS[@]}"; do
-    echo $TEST
-  done
-fi
+for TEST in "${FAILED_TESTS[@]}"; do
+  echo "$TEST FAILED"
+done
 
 exit $RETURN_VALUE
