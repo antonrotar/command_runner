@@ -39,11 +39,11 @@ echo "================="
 echo "$(echo $ALL_TESTS | wc -w) tests executed."
 
 for TEST in "${PASSED_TESTS[@]}"; do
-  echo -e "$TEST $PASSED_MESSAGE"
+  echo -e $TEST $PASSED_MESSAGE
 done
 
 for TEST in "${FAILED_TESTS[@]}"; do
-  echo -e "$TEST $FAILED_MESSAGE"
+  echo -e $TEST $FAILED_MESSAGE
 done
 
 exit $RETURN_VALUE
