@@ -16,7 +16,7 @@ RETURN_VALUE=0
 if [ "$#" -eq 1 ]; then
   TEST_DIRECTORY=$1
 else
-  TEST_DIRECTORY=$(dirname "$0")
+  TEST_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 fi
 ALL_TESTS=$(find $TEST_DIRECTORY -name *_test.sh)
 
