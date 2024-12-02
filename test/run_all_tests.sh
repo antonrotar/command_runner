@@ -4,8 +4,12 @@
 # All tests are printed sorted by passed/failed.
 # It returns 1 if any test fails.
 
+# Variables and constants.
 PASSED_MESSAGE="\e[0;32mPASSED\e[0m"
 FAILED_MESSAGE="\e[1;31mFAILED\e[0m"
+PASSED_TESTS=()
+FAILED_TESTS=()
+RETURN_VALUE=0
 
 # Find all tests in given directory.
 # If no directory is given, take the script directory.
@@ -17,9 +21,6 @@ fi
 ALL_TESTS=$(find $TEST_DIRECTORY -name *_test.sh)
 
 # Execute all tests.
-PASSED_TESTS=()
-FAILED_TESTS=()
-RETURN_VALUE=0
 for TEST in $ALL_TESTS; do
   echo "Executing $TEST"
   $TEST
