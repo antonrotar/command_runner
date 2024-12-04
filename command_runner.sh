@@ -63,6 +63,7 @@ command_runner_add() {
     commands_valid=0
     return 1
   fi
+
   if [ ! "$#" -eq 1 ]; then
     echo -e "$(_print_failed)" "command_runner_add $@"
     echo "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation."
@@ -82,6 +83,7 @@ command_runner_add_with_expectation() {
     commands_valid=0
     return 1
   fi
+
   if [ ! "$#" -eq 2 ]; then
     echo -e "$(_print_failed)" "command_runner_add_with_expectation $@"
     echo "Please provide exactly one expectation."
