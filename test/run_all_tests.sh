@@ -18,7 +18,7 @@ if [ "$#" -eq 1 ]; then
 else
   TEST_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 fi
-ALL_TESTS=$(find $TEST_DIRECTORY -name *_test.sh)
+ALL_TESTS=$(find $TEST_DIRECTORY -name *_test.sh | sort)
 
 # Execute all tests.
 for TEST in $ALL_TESTS; do
