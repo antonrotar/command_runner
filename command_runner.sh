@@ -29,7 +29,23 @@
 
 #!/bin/bash
 
+_fail_contract() {
+  local FUNCTION_NAME="$1"
+  local ERROR_LOG="$2"
+  shift
+  shift
+
+  echo -e "$(_print_failed)" "$FUNCTION_NAME $@"
+  echo $ERROR_LOG
+
+  exit 1
+}
+
 command_runner_reset() {
+  if [ "$#" -gt 0 ]; then
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
   commands=()
   results=()
   outputs=()
@@ -42,33 +58,50 @@ command_runner_reset() {
 }
 
 command_runner_set_colored_output() {
-  colored_output="$1"
+  if [ "$#" -eq 0 ]; then
+    colored_output=1
+  elif [ "$#" -eq 1 ]; then
+    colored_output="$1"
+  else
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
   return 0
 }
 
 command_runner_set_verbose() {
-  verbose="$1"
+  if [ "$#" -eq 0 ]; then
+    verbose=1
+  elif [ "$#" -eq 1 ]; then
+    verbose="$1"
+  else
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
   return 0
 }
 
 command_runner_set_streamed() {
-  streamed="$1"
+  if [ "$#" -eq 0 ]; then
+    streamed=1
+  elif [ "$#" -eq 1 ]; then
+    streamed="$1"
+  else
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
   return 0
 }
 
 command_runner_add() {
   if [ "$#" -eq 0 ]; then
-    echo -e "$(_print_failed)" "command_runner_add $@"
-    echo "Please provide a command."
     commands_valid=0
-    return 1
+    _fail_contract $FUNCNAME "Please provide a command." "$@"
   fi
 
   if [ ! "$#" -eq 1 ]; then
-    echo -e "$(_print_failed)" "command_runner_add $@"
-    echo "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation."
     commands_valid=0
-    return 1
+    _fail_contract $FUNCNAME "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation." "$@"
   fi
 
   commands+=("$1")
@@ -78,17 +111,13 @@ command_runner_add() {
 
 command_runner_add_with_expectation() {
   if [ "$#" -eq 0 ]; then
-    echo -e "$(_print_failed)" "command_runner_add_with_expectation $@"
-    echo "Please provide a command."
     commands_valid=0
-    return 1
+    _fail_contract $FUNCNAME "Please provide a command." "$@"
   fi
 
   if [ ! "$#" -eq 2 ]; then
-    echo -e "$(_print_failed)" "command_runner_add_with_expectation $@"
-    echo "Please provide exactly one expectation."
     commands_valid=0
-    return 1
+    _fail_contract $FUNCNAME "Please provide exactly one expectation." "$@"
   fi
 
   commands+=("$1")
@@ -206,7 +235,11 @@ command_runner_run() {
     elif [[ "$1" == '-s' ]]; then
       command_runner_set_streamed 1
       shift
+    else
+      _fail_contract $FUNCNAME "Unexpected argument. Please use -v or -s." "$@"
     fi
+  elif [ "$#" -gt 1 ]; then
+    _fail_contract $FUNCNAME "Unexpected arguments. Please use -v or -s." "$@"
   fi
 
   command_runner_check_commands &&
