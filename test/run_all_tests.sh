@@ -26,11 +26,11 @@ for TEST in $ALL_TESTS; do
   $TEST
   if [ $? -eq 0 ]; then
     PASSED_TESTS+=($TEST)
-    echo -e $PASSED_MESSAGE
+    echo -e "Test" $PASSED_MESSAGE
   else
     FAILED_TESTS+=($TEST)
     RETURN_VALUE=1
-    echo -e $FAILED_MESSAGE
+    echo -e "Test" $FAILED_MESSAGE
   fi
 done
 
