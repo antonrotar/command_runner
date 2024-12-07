@@ -185,6 +185,7 @@ command_runner_check_commands() {
 }
 
 command_runner_run_commands() {
+  _print_info "Logs:"
   for i in "${!commands[@]}"; do
     _run_command_and_store_result "${commands[$i]}" "${expected_results[$i]}"
   done
@@ -215,7 +216,7 @@ command_runner_print_errors() {
 
 command_runner_print_summary() {
   echo
-  _print_info "Overall Results:"
+  _print_info "Results:"
   for i in "${!results[@]}"; do
     if [ "${results[$i]}" -eq "${expected_results[$i]}" ]; then
       echo -e "${commands[$i]}" "${expected_results[$i]}" "$(_print_passed)"
