@@ -68,6 +68,49 @@ expect_log_contains() {
   return 0
 }
 
+_extract_specific_logs() {
+  _assert_argument_count $FUNCNAME 4 $#
+
+  local LOG="$1"
+  local RELEVANT_LOG="$2"
+  local IRRELEVANT_LOG_1="$3"
+  local IRRELEVANT_LOG_2="$4"
+
+  local IS_RELEVANT_LOG=false
+
+  while IFS= read -r LINE; do
+    case "$LINE" in
+    *"$RELEVANT_LOG"*)
+      IS_RELEVANT_LOG=true
+      continue
+      ;;
+    *"$IRRELEVANT_LOG_1"* | *"$IRRELEVANT_LOG_2"*)
+      IS_RELEVANT_LOG=false
+      continue
+      ;;
+    esac
+
+    if [ "$IS_RELEVANT_LOG" = true ]; then
+      echo $LINE
+    fi
+  done <<<"$LOG"
+}
+
+extract_logs() {
+  _assert_argument_count $FUNCNAME 1 $#
+  _extract_specific_logs "$1" "Logs:" "Errors:" "Results:"
+}
+
+extract_errors() {
+  _assert_argument_count $FUNCNAME 1 $#
+  _extract_specific_logs "$1" "Errors:" "Logs:" "Results:"
+}
+
+extract_results() {
+  _assert_argument_count $FUNCNAME 1 $#
+  _extract_specific_logs "$1" "Results:" "Logs:" "Errors:"
+}
+
 passing_command() {
   echo "Output from passing command"
   return 0
