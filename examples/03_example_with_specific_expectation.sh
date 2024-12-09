@@ -1,4 +1,4 @@
-set -euo pipefail
+#! /bin/bash -u
 
 # This example adds and runs one failing command with specific expectation.
 # The overall return value will be positive.

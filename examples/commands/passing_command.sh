@@ -1,3 +1,5 @@
+#! /bin/bash -u
+
 # Basic script returning a positive value as a substitute
 # for whatever command the command runner will be executing.
 
