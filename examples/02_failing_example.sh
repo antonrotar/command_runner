@@ -3,10 +3,10 @@
 # This example adds and runs one failing and one passing command.
 # The overall return value will be negative.
 
-script_directory="$(dirname "$0")"
-source "$script_directory/../command_runner.sh"
+SCRIPT_DIRECTORY="$(dirname "$0")"
+source "$SCRIPT_DIRECTORY/../command_runner.sh"
 
-command_runner_add ./$script_directory/commands/failing_command.sh
-command_runner_add ./$script_directory/commands/passing_command.sh
+command_runner_add ./$SCRIPT_DIRECTORY/commands/failing_command.sh
+command_runner_add ./$SCRIPT_DIRECTORY/commands/passing_command.sh
 
 command_runner_run "$@"

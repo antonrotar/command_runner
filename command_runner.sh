@@ -46,22 +46,22 @@ command_runner_reset() {
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
 
-  commands=()
-  results=()
-  outputs=()
-  expected_results=()
-  colored_output=1
-  verbose=0
-  streamed=0
-  commands_valid=1
+  COMMANDS=()
+  RESULTS=()
+  OUTPUTS=()
+  EXPECTED_RESULTS=()
+  COLORED_OUTPUT=1
+  VERBOSE=0
+  STREAMED=0
+  COMMANDS_VALID=1
   return 0
 }
 
 command_runner_set_colored_output() {
   if [ "$#" -eq 0 ]; then
-    colored_output=1
+    COLORED_OUTPUT=1
   elif [ "$#" -eq 1 ]; then
-    colored_output="$1"
+    COLORED_OUTPUT="$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
@@ -71,9 +71,9 @@ command_runner_set_colored_output() {
 
 command_runner_set_verbose() {
   if [ "$#" -eq 0 ]; then
-    verbose=1
+    VERBOSE=1
   elif [ "$#" -eq 1 ]; then
-    verbose="$1"
+    VERBOSE="$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
@@ -83,9 +83,9 @@ command_runner_set_verbose() {
 
 command_runner_set_streamed() {
   if [ "$#" -eq 0 ]; then
-    streamed=1
+    STREAMED=1
   elif [ "$#" -eq 1 ]; then
-    streamed="$1"
+    STREAMED="$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
@@ -95,41 +95,41 @@ command_runner_set_streamed() {
 
 command_runner_add() {
   if [ "$#" -eq 0 ]; then
-    commands_valid=0
+    COMMANDS_VALID=0
     _fail_contract $FUNCNAME "Please provide a command." "$@"
   fi
 
   if [ ! "$#" -eq 1 ]; then
-    commands_valid=0
+    COMMANDS_VALID=0
     _fail_contract $FUNCNAME "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation." "$@"
   fi
 
-  commands+=("$1")
-  expected_results+=(0)
+  COMMANDS+=("$1")
+  EXPECTED_RESULTS+=(0)
   return 0
 }
 
 command_runner_add_with_expectation() {
   if [ "$#" -eq 0 ]; then
-    commands_valid=0
+    COMMANDS_VALID=0
     _fail_contract $FUNCNAME "Please provide a command." "$@"
   fi
 
   if [ ! "$#" -eq 2 ]; then
-    commands_valid=0
+    COMMANDS_VALID=0
     _fail_contract $FUNCNAME "Please provide exactly one expectation." "$@"
   fi
 
-  commands+=("$1")
-  expected_results+=("$2")
+  COMMANDS+=("$1")
+  EXPECTED_RESULTS+=("$2")
   return 0
 }
 
 _print_colored() {
-  local color="$1"
+  local COLOR="$1"
   shift
-  if [ "$colored_output" -eq 1 ]; then
-    echo -e "\e["$color"m$@\e[0m"
+  if [ "$COLORED_OUTPUT" -eq 1 ]; then
+    echo -e "\e["$COLOR"m$@\e[0m"
   else
     echo "$@"
   fi
@@ -137,48 +137,48 @@ _print_colored() {
 }
 
 _print_command() {
-  local normal_cyan="0;36"
-  _print_colored "$normal_cyan" "$@"
+  local NORMAL_CYAN="0;36"
+  _print_colored "$NORMAL_CYAN" "$@"
   return 0
 }
 
 _print_info() {
-  local bold_light_cyan="1;96"
-  _print_colored "$bold_light_cyan" "$1"
+  local BOLD_LIGHT_CYAN="1;96"
+  _print_colored "$BOLD_LIGHT_CYAN" "$1"
   return 0
 }
 
 _print_passed() {
-  local normal_green="0;32"
-  _print_colored "$normal_green" "PASSED"
+  local NORMAL_GREEN="0;32"
+  _print_colored "$NORMAL_GREEN" "PASSED"
   return 0
 }
 
 _print_failed() {
-  local bold_red="1;31"
-  _print_colored "$bold_red" "FAILED"
+  local BOLD_RED="1;31"
+  _print_colored "$BOLD_RED" "FAILED"
   return 0
 }
 
 _run_command_and_store_result() {
   _print_command "$@"
-  local output=""
-  if [ "$streamed" -eq 1 ]; then
+  local OUTPUT=""
+  if [ "$STREAMED" -eq 1 ]; then
     eval "$1"
   else
-    output="$(eval "$1" "2>&1")"
+    OUTPUT="$(eval "$1" "2>&1")"
   fi
 
-  results+=("$?")
-  outputs+=("$output")
-  if [ "$verbose" -eq 1 ]; then
-    echo "$output"
+  RESULTS+=("$?")
+  OUTPUTS+=("$OUTPUT")
+  if [ "$VERBOSE" -eq 1 ]; then
+    echo "$OUTPUT"
   fi
   return 0
 }
 
 command_runner_check_commands() {
-  if [ "$commands_valid" -eq 1 ]; then
+  if [ "$COMMANDS_VALID" -eq 1 ]; then
     return 0
   fi
   return 1
@@ -186,15 +186,15 @@ command_runner_check_commands() {
 
 command_runner_run_commands() {
   _print_info "Logs:"
-  for i in "${!commands[@]}"; do
-    _run_command_and_store_result "${commands[$i]}" "${expected_results[$i]}"
+  for i in "${!COMMANDS[@]}"; do
+    _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
   done
   return 0
 }
 
 command_runner_validate() {
-  for i in "${!results[@]}"; do
-    if [ ! "${results[$i]}" -eq "${expected_results[$i]}" ]; then
+  for i in "${!RESULTS[@]}"; do
+    if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
       return 1
     fi
   done
@@ -203,11 +203,11 @@ command_runner_validate() {
 
 command_runner_print_errors() {
   _print_info "Errors:"
-  for i in "${!results[@]}"; do
-    if [ ! "${results[$i]}" -eq "${expected_results[$i]}" ]; then
-      echo "$(_print_info "Error executing:")" "${commands[$i]}" "${expected_results[$i]}"
+  for i in "${!RESULTS[@]}"; do
+    if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
+      echo "$(_print_info "Error executing:")" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
       echo "$(_print_info "Output:")"
-      echo "${outputs[$i]}"
+      echo "${OUTPUTS[$i]}"
       echo
     fi
   done
@@ -217,11 +217,11 @@ command_runner_print_errors() {
 command_runner_print_summary() {
   echo
   _print_info "Results:"
-  for i in "${!results[@]}"; do
-    if [ "${results[$i]}" -eq "${expected_results[$i]}" ]; then
-      echo -e "${commands[$i]}" "${expected_results[$i]}" "$(_print_passed)"
+  for i in "${!RESULTS[@]}"; do
+    if [ "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
+      echo -e "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}" "$(_print_passed)"
     else
-      echo -e "${commands[$i]}" "${expected_results[$i]}" "$(_print_failed)"
+      echo -e "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}" "$(_print_failed)"
     fi
   done
   return 0
