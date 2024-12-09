@@ -3,6 +3,9 @@
 source_command_runner() {
   SCRIPT_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
   source "$SCRIPT_DIRECTORY/../../../command_runner.sh"
+
+  # Disable colored output to allow exact string matching on output logs.
+  command_runner_set_colored_output 0
 }
 
 _assert_argument_count() {
@@ -55,13 +58,13 @@ expect_log_empty() {
 expect_log_contains() {
   _assert_argument_count $FUNCNAME 2 $#
 
-  echo "$1" | grep -q "$2"
+  echo "$1" | grep -qPz "$2"
 
   if [ "$?" -ne 0 ]; then
     echo "Expected log contains:"
-    echo "$2"
+    echo -e "$2"
     echo "Actual log:"
-    echo "$1"
+    echo -e "$1"
     exit 1
   fi
 
