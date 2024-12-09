@@ -2,7 +2,7 @@
 
 source_command_runner() {
   SCRIPT_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
-  source "$SCRIPT_DIRECTORY/../../../command_runner.sh"
+  source "$SCRIPT_DIRECTORY/../../command_runner.sh"
 
   # Disable colored output to allow exact string matching on output logs.
   command_runner_set_colored_output 0
