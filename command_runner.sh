@@ -205,10 +205,10 @@ command_runner_print_errors() {
   _print_info "Errors:"
   for i in "${!results[@]}"; do
     if [ ! "${results[$i]}" -eq "${expected_results[$i]}" ]; then
-      echo >&2 "$(_print_info "Error executing:")" "${commands[$i]}" "${expected_results[$i]}"
-      echo >&2 "$(_print_info "Output:")"
-      echo >&2 "${outputs[$i]}"
-      echo >&2
+      echo "$(_print_info "Error executing:")" "${commands[$i]}" "${expected_results[$i]}"
+      echo "$(_print_info "Output:")"
+      echo "${outputs[$i]}"
+      echo
     fi
   done
   return 0
