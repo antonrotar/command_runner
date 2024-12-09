@@ -119,6 +119,11 @@ passing_command() {
   return 0
 }
 
+another_passing_command() {
+  echo "Output from another passing command"
+  return 0
+}
+
 failing_command() {
   echo "Output from failing command"
   return 1
