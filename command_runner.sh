@@ -188,14 +188,14 @@ _run_command_and_store_result() {
   return 0
 }
 
-command_runner_check_commands() {
+_command_runner_check_commands() {
   if [ "$COMMANDS_VALID" -eq 1 ]; then
     return 0
   fi
   return 1
 }
 
-command_runner_run_commands() {
+_command_runner_run_commands() {
   _print_info "Logs:"
 
   for i in "${!COMMANDS[@]}"; do
@@ -205,7 +205,7 @@ command_runner_run_commands() {
   return 0
 }
 
-command_runner_validate() {
+_command_runner_validate() {
   for i in "${!RESULTS[@]}"; do
     if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
       return 1
@@ -215,7 +215,7 @@ command_runner_validate() {
   return 0
 }
 
-command_runner_print_errors() {
+_command_runner_print_errors() {
   _print_info "Errors:"
 
   for i in "${!RESULTS[@]}"; do
@@ -230,7 +230,7 @@ command_runner_print_errors() {
   return 0
 }
 
-command_runner_print_summary() {
+_command_runner_print_summary() {
   echo
   _print_info "Results:"
 
@@ -261,11 +261,11 @@ command_runner_run() {
     _fail_contract $FUNCNAME "Unexpected arguments. Please use -v or -s." "$@"
   fi
 
-  command_runner_check_commands &&
-    command_runner_run_commands &&
-    command_runner_print_errors &&
-    command_runner_print_summary &&
-    command_runner_validate
+  _command_runner_check_commands &&
+    _command_runner_run_commands &&
+    _command_runner_print_errors &&
+    _command_runner_print_summary &&
+    _command_runner_validate
 }
 
 command_runner_reset
