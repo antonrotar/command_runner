@@ -54,6 +54,7 @@ command_runner_reset() {
   VERBOSE=0
   STREAMED=0
   COMMANDS_VALID=1
+
   return 0
 }
 
@@ -106,6 +107,7 @@ command_runner_add() {
 
   COMMANDS+=("$1")
   EXPECTED_RESULTS+=(0)
+
   return 0
 }
 
@@ -122,47 +124,55 @@ command_runner_add_with_expectation() {
 
   COMMANDS+=("$1")
   EXPECTED_RESULTS+=("$2")
+
   return 0
 }
 
 _print_colored() {
   local COLOR="$1"
   shift
+
   if [ "$COLORED_OUTPUT" -eq 1 ]; then
     echo -e "\e["$COLOR"m$@\e[0m"
   else
     echo "$@"
   fi
+
   return 0
 }
 
 _print_command() {
   local NORMAL_CYAN="0;36"
   _print_colored "$NORMAL_CYAN" "$@"
+
   return 0
 }
 
 _print_info() {
   local BOLD_LIGHT_CYAN="1;96"
   _print_colored "$BOLD_LIGHT_CYAN" "$1"
+
   return 0
 }
 
 _print_passed() {
   local NORMAL_GREEN="0;32"
   _print_colored "$NORMAL_GREEN" "PASSED"
+
   return 0
 }
 
 _print_failed() {
   local BOLD_RED="1;31"
   _print_colored "$BOLD_RED" "FAILED"
+
   return 0
 }
 
 _run_command_and_store_result() {
   _print_command "$@"
   local OUTPUT=""
+
   if [ "$STREAMED" -eq 1 ]; then
     eval "$1"
   else
@@ -174,6 +184,7 @@ _run_command_and_store_result() {
   if [ "$VERBOSE" -eq 1 ]; then
     echo "$OUTPUT"
   fi
+
   return 0
 }
 
@@ -186,9 +197,11 @@ command_runner_check_commands() {
 
 command_runner_run_commands() {
   _print_info "Logs:"
+
   for i in "${!COMMANDS[@]}"; do
     _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
   done
+
   return 0
 }
 
@@ -198,11 +211,13 @@ command_runner_validate() {
       return 1
     fi
   done
+
   return 0
 }
 
 command_runner_print_errors() {
   _print_info "Errors:"
+
   for i in "${!RESULTS[@]}"; do
     if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
       echo "$(_print_info "Error executing:")" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
@@ -211,12 +226,14 @@ command_runner_print_errors() {
       echo
     fi
   done
+
   return 0
 }
 
 command_runner_print_summary() {
   echo
   _print_info "Results:"
+
   for i in "${!RESULTS[@]}"; do
     if [ "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
       echo -e "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}" "$(_print_passed)"
@@ -224,6 +241,7 @@ command_runner_print_summary() {
       echo -e "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}" "$(_print_failed)"
     fi
   done
+
   return 0
 }
 
