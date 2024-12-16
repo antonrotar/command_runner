@@ -70,11 +70,31 @@ command_runner_set_colored_output() {
   return 0
 }
 
+_command_runner_set_verbose() {
+  VERBOSE="$1"
+
+  if [ "$1" -eq 1 ]; then
+    STREAMED=0
+  fi
+
+  return 0
+}
+
+_command_runner_set_streamed() {
+  STREAMED="$1"
+
+  if [ "$1" -eq 1 ]; then
+    VERBOSE=0
+  fi
+
+  return 0
+}
+
 command_runner_set_verbose() {
   if [ "$#" -eq 0 ]; then
-    VERBOSE=1
+    _command_runner_set_verbose 1
   elif [ "$#" -eq 1 ]; then
-    VERBOSE="$1"
+    _command_runner_set_verbose "$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
@@ -84,9 +104,9 @@ command_runner_set_verbose() {
 
 command_runner_set_streamed() {
   if [ "$#" -eq 0 ]; then
-    STREAMED=1
+    _command_runner_set_streamed 1
   elif [ "$#" -eq 1 ]; then
-    STREAMED="$1"
+    _command_runner_set_streamed "$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
