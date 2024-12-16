@@ -29,6 +29,18 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Implementation.
+#
+# Variables and states.
+COMMANDS=()         # Commands to be executed collected via the "add" methods.
+RESULTS=()          # Return codes of the commands after execution.
+OUTPUTS=()          # Output logs of the commands after execution.
+EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expectation.
+COLORED_OUTPUT=1    # Use colors in command runner output.
+VERBOSE=0           # Print all command outputs AFTER execution.
+STREAMED=0          # Print all command outputs DURING execution.
+COMMANDS_VALID=1    # Set to "false" on any invalid added command.
+
 _fail_contract() {
   local FUNCTION_NAME="$1"
   local ERROR_LOG="$2"
@@ -45,15 +57,6 @@ command_runner_reset() {
   if [ "$#" -gt 0 ]; then
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
-
-  COMMANDS=()
-  RESULTS=()
-  OUTPUTS=()
-  EXPECTED_RESULTS=()
-  COLORED_OUTPUT=1
-  VERBOSE=0
-  STREAMED=0
-  COMMANDS_VALID=1
 
   return 0
 }
