@@ -53,14 +53,6 @@ _fail_contract() {
   exit 1
 }
 
-command_runner_reset() {
-  if [ "$#" -gt 0 ]; then
-    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
-  fi
-
-  return 0
-}
-
 command_runner_set_colored_output() {
   if [ "$#" -eq 0 ]; then
     COLORED_OUTPUT=1
@@ -290,5 +282,3 @@ command_runner_run() {
     _command_runner_print_summary &&
     _command_runner_validate
 }
-
-command_runner_reset
