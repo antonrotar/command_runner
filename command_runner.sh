@@ -41,6 +41,7 @@ VERBOSE=0           # Print all command outputs AFTER execution.
 STREAMED=0          # Print all command outputs DURING execution.
 COMMANDS_VALID=1    # Set to "false" on any invalid added command.
 
+# Private methods.
 _fail_contract() {
   local FUNCTION_NAME="$1"
   local ERROR_LOG="$2"
@@ -51,18 +52,6 @@ _fail_contract() {
   echo $ERROR_LOG
 
   exit 1
-}
-
-command_runner_set_colored_output() {
-  if [ "$#" -eq 0 ]; then
-    COLORED_OUTPUT=1
-  elif [ "$#" -eq 1 ]; then
-    COLORED_OUTPUT="$1"
-  else
-    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
-  fi
-
-  return 0
 }
 
 _command_runner_set_verbose() {
@@ -81,64 +70,6 @@ _command_runner_set_streamed() {
   if [ "$1" -eq 1 ]; then
     VERBOSE=0
   fi
-
-  return 0
-}
-
-command_runner_set_verbose() {
-  if [ "$#" -eq 0 ]; then
-    _command_runner_set_verbose 1
-  elif [ "$#" -eq 1 ]; then
-    _command_runner_set_verbose "$1"
-  else
-    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
-  fi
-
-  return 0
-}
-
-command_runner_set_streamed() {
-  if [ "$#" -eq 0 ]; then
-    _command_runner_set_streamed 1
-  elif [ "$#" -eq 1 ]; then
-    _command_runner_set_streamed "$1"
-  else
-    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
-  fi
-
-  return 0
-}
-
-command_runner_add() {
-  if [ "$#" -eq 0 ]; then
-    COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Please provide a command." "$@"
-  fi
-
-  if [ ! "$#" -eq 1 ]; then
-    COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation." "$@"
-  fi
-
-  COMMANDS+=("$1")
-  EXPECTED_RESULTS+=(0)
-
-  return 0
-}
-
-command_runner_add_with_expectation() {
-  if [ "$#" -eq 0 ]; then
-    COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Please provide a command." "$@"
-  fi
-
-  if [ ! "$#" -eq 2 ]; then
-    COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Please provide exactly one expectation." "$@"
-  fi
-
-  COMMANDS+=("$1")
-  EXPECTED_RESULTS+=("$2")
 
   return 0
 }
@@ -260,6 +191,41 @@ _command_runner_print_summary() {
   return 0
 }
 
+# Public API
+command_runner_add() {
+  if [ "$#" -eq 0 ]; then
+    COMMANDS_VALID=0
+    _fail_contract $FUNCNAME "Please provide a command." "$@"
+  fi
+
+  if [ ! "$#" -eq 1 ]; then
+    COMMANDS_VALID=0
+    _fail_contract $FUNCNAME "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation." "$@"
+  fi
+
+  COMMANDS+=("$1")
+  EXPECTED_RESULTS+=(0)
+
+  return 0
+}
+
+command_runner_add_with_expectation() {
+  if [ "$#" -eq 0 ]; then
+    COMMANDS_VALID=0
+    _fail_contract $FUNCNAME "Please provide a command." "$@"
+  fi
+
+  if [ ! "$#" -eq 2 ]; then
+    COMMANDS_VALID=0
+    _fail_contract $FUNCNAME "Please provide exactly one expectation." "$@"
+  fi
+
+  COMMANDS+=("$1")
+  EXPECTED_RESULTS+=("$2")
+
+  return 0
+}
+
 command_runner_run() {
 
   if [ "$#" -eq 1 ]; then
@@ -281,4 +247,40 @@ command_runner_run() {
     _command_runner_print_errors &&
     _command_runner_print_summary &&
     _command_runner_validate
+}
+
+command_runner_set_colored_output() {
+  if [ "$#" -eq 0 ]; then
+    COLORED_OUTPUT=1
+  elif [ "$#" -eq 1 ]; then
+    COLORED_OUTPUT="$1"
+  else
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
+  return 0
+}
+
+command_runner_set_verbose() {
+  if [ "$#" -eq 0 ]; then
+    _command_runner_set_verbose 1
+  elif [ "$#" -eq 1 ]; then
+    _command_runner_set_verbose "$1"
+  else
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
+  return 0
+}
+
+command_runner_set_streamed() {
+  if [ "$#" -eq 0 ]; then
+    _command_runner_set_streamed 1
+  elif [ "$#" -eq 1 ]; then
+    _command_runner_set_streamed "$1"
+  else
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
+  return 0
 }
