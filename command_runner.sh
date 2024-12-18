@@ -81,10 +81,8 @@ _set_output_options() {
   if [ "$#" -eq 1 ]; then
     if [[ "$1" == '-v' ]]; then
       command_runner_set_verbose 1
-      shift
     elif [[ "$1" == '-s' ]]; then
       command_runner_set_streamed 1
-      shift
     else
       _fail_contract $CALLING_FUNCTION "Unexpected argument. Please use -v or -s." "$@"
     fi
