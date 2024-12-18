@@ -74,6 +74,27 @@ _command_runner_set_streamed() {
   return 0
 }
 
+_set_output_options() {
+  CALLING_FUNCTION="$1"
+  shift
+
+  if [ "$#" -eq 1 ]; then
+    if [[ "$1" == '-v' ]]; then
+      command_runner_set_verbose 1
+      shift
+    elif [[ "$1" == '-s' ]]; then
+      command_runner_set_streamed 1
+      shift
+    else
+      _fail_contract $CALLING_FUNCTION "Unexpected argument. Please use -v or -s." "$@"
+    fi
+  elif [ "$#" -gt 1 ]; then
+    _fail_contract $CALLING_FUNCTION "Unexpected arguments. Please use -v or -s." "$@"
+  fi
+
+  return 0
+}
+
 _print_colored() {
   local COLOR="$1"
   shift
@@ -227,20 +248,7 @@ command_runner_add_with_expectation() {
 }
 
 command_runner_run() {
-
-  if [ "$#" -eq 1 ]; then
-    if [[ "$1" == '-v' ]]; then
-      command_runner_set_verbose 1
-      shift
-    elif [[ "$1" == '-s' ]]; then
-      command_runner_set_streamed 1
-      shift
-    else
-      _fail_contract $FUNCNAME "Unexpected argument. Please use -v or -s." "$@"
-    fi
-  elif [ "$#" -gt 1 ]; then
-    _fail_contract $FUNCNAME "Unexpected arguments. Please use -v or -s." "$@"
-  fi
+  _set_output_options $FUNCNAME "$@"
 
   _command_runner_check_commands &&
     _command_runner_run_commands &&
