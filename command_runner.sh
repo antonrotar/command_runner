@@ -244,6 +244,11 @@ _command_runner_print_summary() {
 }
 
 # Public API
+#
+# Use this function to add a command for later execution.
+# Put the command in quotes, otherwise add it like you would run it from the command line. E.g.
+# command_runner_add "ls -l"
+# The command is expected to return 0 to be counted as PASSED.
 command_runner_add() {
   if [ "$#" -eq 0 ]; then
     COMMANDS_VALID=0
@@ -261,6 +266,12 @@ command_runner_add() {
   return 0
 }
 
+# Use this function the same way as command_runner_add but with an additional expected return value.
+# Use it if you expect a command to fail, but want to count it as PASSED nevertheless.
+# This is useful to temporarily accept failing commands but still run them
+# or to explicitly test for true negatives. E.g.
+# command_runner_add_with_expectation "ls invalid_path -l" 2
+# The command is expected to return the given value to be counted as PASSED.
 command_runner_add_with_expectation() {
   if [ "$#" -eq 0 ]; then
     COMMANDS_VALID=0
