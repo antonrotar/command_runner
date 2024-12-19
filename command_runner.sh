@@ -122,6 +122,13 @@ _print_command() {
   return 0
 }
 
+_print_failed_command() {
+  local NORMAL_RED="0;31"
+  _print_colored "$NORMAL_RED" "$@"
+
+  return 0
+}
+
 _print_info() {
   local BOLD_LIGHT_CYAN="1;96"
   _print_colored "$BOLD_LIGHT_CYAN" "$1"
@@ -207,14 +214,13 @@ _command_runner_validate() {
 
 # This function prints the output of all failed commands.
 _command_runner_print_errors() {
+  echo
   _print_info "Errors:"
 
   for i in "${!RESULTS[@]}"; do
     if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
-      echo "$(_print_info "Error executing:")" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
-      echo "$(_print_info "Output:")"
+      _print_failed_command "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
       echo "${OUTPUTS[$i]}"
-      echo
     fi
   done
 
