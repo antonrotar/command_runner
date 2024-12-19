@@ -42,6 +42,8 @@ STREAMED=0          # Print all command outputs DURING execution.
 COMMANDS_VALID=1    # Set to "false" on any invalid added command.
 
 # Private methods.
+#
+# Helper function for contract guard clause. Prints error log and exits the script.
 _fail_contract() {
   local FUNCTION_NAME="$1"
   local ERROR_LOG="$2"
@@ -54,6 +56,8 @@ _fail_contract() {
   exit 1
 }
 
+# If both verbose and streamed options are set, the behavior might be unexpected.
+# This method ensures only one option is set to 1.
 _command_runner_set_verbose() {
   VERBOSE="$1"
 
@@ -64,6 +68,8 @@ _command_runner_set_verbose() {
   return 0
 }
 
+# If both verbose and streamed options are set, the behavior might be unexpected.
+# This method ensures only one option is set to 1.
 _command_runner_set_streamed() {
   STREAMED="$1"
 
@@ -74,6 +80,8 @@ _command_runner_set_streamed() {
   return 0
 }
 
+# Helper function for command_runner_run argument handling.
+# Verifies that either no option or one of [-v, -s].
 _set_output_options() {
   CALLING_FUNCTION="$1"
   shift
@@ -93,6 +101,7 @@ _set_output_options() {
   return 0
 }
 
+# Prints given output in color if enabled.
 _print_colored() {
   local COLOR="$1"
   shift
@@ -134,18 +143,27 @@ _print_failed() {
   return 0
 }
 
+# This is the main function of the whole script.
+# Commands are printed and executed here.
+# The output is printed given the different output options.
+# The result is stored for later evaluation.
 _run_command_and_store_result() {
   _print_command "$@"
   local OUTPUT=""
 
   if [ "$STREAMED" -eq 1 ]; then
+    # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
+    # Ideally the output would still be stored in addition to printing it directly.
+    # I didn't find a way to accomplish that unfortunately.
     eval "$1"
   else
     OUTPUT="$(eval "$1" "2>&1")"
   fi
 
+  # This line must come directly after the "eval" call. Else "$?"" might be already be overwritten.
   RESULTS+=("$?")
   OUTPUTS+=("$OUTPUT")
+
   if [ "$VERBOSE" -eq 1 ]; then
     echo "$OUTPUT"
   fi
@@ -153,6 +171,8 @@ _run_command_and_store_result() {
   return 0
 }
 
+# Additional safety net, just in case that the exit calls from the contract are ignored somehow.
+# Prevents running invalid commands.
 _command_runner_check_commands() {
   if [ "$COMMANDS_VALID" -eq 1 ]; then
     return 0
@@ -160,6 +180,7 @@ _command_runner_check_commands() {
   return 1
 }
 
+# Run all stored commands, print them and store the results.
 _command_runner_run_commands() {
   _print_info "Logs:"
 
@@ -170,6 +191,10 @@ _command_runner_run_commands() {
   return 0
 }
 
+# The three functions below have similar code but are kept separate on purpose.
+# They represent different semantical concepts and might change at different times for different reasons.
+#
+# This function evaluates if all commands have the expected results.
 _command_runner_validate() {
   for i in "${!RESULTS[@]}"; do
     if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
@@ -180,6 +205,7 @@ _command_runner_validate() {
   return 0
 }
 
+# This function prints the output of all failed commands.
 _command_runner_print_errors() {
   _print_info "Errors:"
 
@@ -195,6 +221,7 @@ _command_runner_print_errors() {
   return 0
 }
 
+# This function prints a summary over all executed commands.
 _command_runner_print_summary() {
   echo
   _print_info "Results:"
