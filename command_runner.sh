@@ -32,7 +32,7 @@
 # Implementation.
 #
 # Variables and states.
-COMMANDS=()         # Commands to be executed collected via the "add" methods.
+COMMANDS=()         # Commands to be executed collected via the "add" functions.
 RESULTS=()          # Return codes of the commands after execution.
 OUTPUTS=()          # Output logs of the commands after execution.
 EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expectation.
@@ -41,7 +41,7 @@ VERBOSE=0           # Print all command outputs AFTER execution.
 STREAMED=0          # Print all command outputs DURING execution.
 COMMANDS_VALID=1    # Set to "false" on any invalid added command.
 
-# Private methods.
+# Private functions.
 #
 # Helper function for contract guard clause. Prints error log and exits the script.
 _fail_contract() {
@@ -57,7 +57,7 @@ _fail_contract() {
 }
 
 # If both verbose and streamed options are set, the behavior might be unexpected.
-# This method ensures only one option is set to 1.
+# This function ensures only one option is set to 1.
 _command_runner_set_verbose() {
   VERBOSE="$1"
 
@@ -69,7 +69,7 @@ _command_runner_set_verbose() {
 }
 
 # If both verbose and streamed options are set, the behavior might be unexpected.
-# This method ensures only one option is set to 1.
+# This function ensures only one option is set to 1.
 _command_runner_set_streamed() {
   STREAMED="$1"
 
@@ -246,7 +246,7 @@ command_runner_add() {
 
   if [ ! "$#" -eq 1 ]; then
     COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Method does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation." "$@"
+    _fail_contract $FUNCNAME "Function does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation." "$@"
   fi
 
   COMMANDS+=("$1")
