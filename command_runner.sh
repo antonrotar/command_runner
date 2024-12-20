@@ -101,6 +101,23 @@ _set_output_options() {
   return 0
 }
 
+# Helper function for output settings functions argument handling.
+# Verifies that either no option or one of [0, 1] is set.
+_get_output_option() {
+  CALLING_FUNCTION="$1"
+  shift
+
+  if [ "$#" -eq 0 ]; then
+    return 1
+  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
+    return "$1"
+  else
+    _fail_contract $CALLING_FUNCTION "Unexpected arguments." "$@"
+  fi
+
+  return 0
+}
+
 # Prints given output in color if enabled.
 _print_colored() {
   local COLOR="$1"
@@ -327,13 +344,8 @@ command_runner_run() {
 # command_runner_set_colored_output 0
 # will disable it.
 command_runner_set_colored_output() {
-  if [ "$#" -eq 0 ]; then
-    COLORED_OUTPUT=1
-  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
-    COLORED_OUTPUT="$1"
-  else
-    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
-  fi
+  _get_output_option $FUNCNAME "$@"
+  COLORED_OUTPUT=$?
 
   return 0
 }
@@ -348,13 +360,8 @@ command_runner_set_colored_output() {
 # command_runner_set_verbose 0
 # will disable it.
 command_runner_set_verbose() {
-  if [ "$#" -eq 0 ]; then
-    _command_runner_set_verbose 1
-  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
-    _command_runner_set_verbose "$1"
-  else
-    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
-  fi
+  _get_output_option $FUNCNAME "$@"
+  _command_runner_set_verbose $?
 
   return 0
 }
@@ -370,13 +377,8 @@ command_runner_set_verbose() {
 # command_runner_set_streamed 0
 # will disable it.
 command_runner_set_streamed() {
-  if [ "$#" -eq 0 ]; then
-    _command_runner_set_streamed 1
-  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
-    _command_runner_set_streamed "$1"
-  else
-    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
-  fi
+  _get_output_option $FUNCNAME "$@"
+  _command_runner_set_streamed $?
 
   return 0
 }
