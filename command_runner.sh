@@ -310,7 +310,7 @@ command_runner_run() {
 command_runner_set_colored_output() {
   if [ "$#" -eq 0 ]; then
     COLORED_OUTPUT=1
-  elif [ "$#" -eq 1 ]; then
+  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
     COLORED_OUTPUT="$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
@@ -322,7 +322,7 @@ command_runner_set_colored_output() {
 command_runner_set_verbose() {
   if [ "$#" -eq 0 ]; then
     _command_runner_set_verbose 1
-  elif [ "$#" -eq 1 ]; then
+  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
     _command_runner_set_verbose "$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
@@ -334,7 +334,7 @@ command_runner_set_verbose() {
 command_runner_set_streamed() {
   if [ "$#" -eq 0 ]; then
     _command_runner_set_streamed 1
-  elif [ "$#" -eq 1 ]; then
+  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
     _command_runner_set_streamed "$1"
   else
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
