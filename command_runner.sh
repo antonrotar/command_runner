@@ -289,6 +289,17 @@ command_runner_add_with_expectation() {
   return 0
 }
 
+# Use this function to run the previously added commands.
+# Commands will be executed in the order they were added.
+# The exact logging behavior depends on the output settings:
+# command_runner_run
+# will run all commands with default output settings.
+# command_runner_run -v
+# will run all commands with verbose output settings.
+# command_runner_run -s
+# will run all commands with streamed output settings.
+# In all cases all failed commands and a summary will be printed.
+# The return value will be 0 if all commands passed and 1 if at least one command failed.
 command_runner_run() {
   _set_output_options $FUNCNAME "$@"
 
@@ -308,6 +319,13 @@ command_runner_run() {
   return $RETURN_VALUE
 }
 
+# Use this function to specify if colored output should be used.
+# command_runner_set_colored_output
+# is equivalent to
+# command_runner_set_colored_output 1
+# and will enable colored output.
+# command_runner_set_colored_output 0
+# will disable it.
 command_runner_set_colored_output() {
   if [ "$#" -eq 0 ]; then
     COLORED_OUTPUT=1
@@ -320,6 +338,15 @@ command_runner_set_colored_output() {
   return 0
 }
 
+# Use this function to specify if verbose output should be used.
+# Verbose output means that the logs of all commands will be printed
+# AFTER execution. Otherwise only the logs of failed commands will be printed.
+# command_runner_set_verbose
+# is equivalent to
+# command_runner_set_verbose 1
+# and will enable verbose output.
+# command_runner_set_verbose 0
+# will disable it.
 command_runner_set_verbose() {
   if [ "$#" -eq 0 ]; then
     _command_runner_set_verbose 1
@@ -332,6 +359,16 @@ command_runner_set_verbose() {
   return 0
 }
 
+# Use this function to specify if streamed output should be used.
+# Streamed output means that the logs of all commands will be printed
+# DURING execution. This is helpful if you want to observe the output
+# of long running commands.
+# command_runner_set_streamed
+# is equivalent to
+# command_runner_set_streamed 1
+# and will enable streamed output.
+# command_runner_set_streamed 0
+# will disable it.
 command_runner_set_streamed() {
   if [ "$#" -eq 0 ]; then
     _command_runner_set_streamed 1
