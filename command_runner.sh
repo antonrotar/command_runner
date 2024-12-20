@@ -209,7 +209,7 @@ _command_runner_run_commands() {
 # They represent different semantical concepts and might change at different times for different reasons.
 #
 # This function evaluates if all commands have the expected results.
-_command_runner_validate() {
+_command_runner_evaluate() {
   for i in "${!RESULTS[@]}"; do
     if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
       return 1
@@ -301,7 +301,7 @@ command_runner_run() {
   _command_runner_run_commands &&
     _command_runner_print_errors &&
     _command_runner_print_summary &&
-    _command_runner_validate
+    _command_runner_evaluate
 
   RETURN_VALUE=$?
 
