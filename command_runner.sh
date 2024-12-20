@@ -81,7 +81,7 @@ _command_runner_set_streamed() {
 }
 
 # Helper function for command_runner_run argument handling.
-# Verifies that either no option or one of [-v, -s].
+# Verifies that either no option or one of [-v, -s] is set.
 _set_output_options() {
   CALLING_FUNCTION="$1"
   shift
@@ -167,7 +167,7 @@ _run_command_and_store_result() {
     OUTPUT="$(eval "$1" "2>&1")"
   fi
 
-  # This line must come directly after the "eval" call. Else "$?"" might be already be overwritten.
+  # This line must come directly after the "eval" call. Else "$?"" might already be overwritten.
   RESULTS+=("$?")
   OUTPUTS+=("$OUTPUT")
 
