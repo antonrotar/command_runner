@@ -39,7 +39,6 @@ EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expect
 COLORED_OUTPUT=1    # Use colors in command runner output.
 VERBOSE=0           # Print all command outputs AFTER execution.
 STREAMED=0          # Print all command outputs DURING execution.
-COMMANDS_VALID=1    # Set to "false" on any invalid added command.
 
 # Private functions.
 #
@@ -195,15 +194,6 @@ _run_command_and_store_result() {
   return 0
 }
 
-# Additional safety net, just in case that the exit calls from the contract are ignored somehow.
-# Prevents running invalid commands.
-_command_runner_check_commands() {
-  if [ "$COMMANDS_VALID" -eq 1 ]; then
-    return 0
-  fi
-  return 1
-}
-
 # Run all stored commands, print them and store the results.
 _command_runner_run_commands() {
   _print_info "Logs:"
@@ -268,7 +258,6 @@ _command_runner_print_summary() {
 # The command is expected to return 0 to be counted as PASSED.
 command_runner_add() {
   if [ ! "$#" -eq 1 ]; then
-    COMMANDS_VALID=0
     _fail_contract $FUNCNAME "Please provide exactly one command." "$@"
   fi
 
@@ -286,7 +275,6 @@ command_runner_add() {
 # The command is expected to return the given value to be counted as PASSED.
 command_runner_add_with_expectation() {
   if [ ! "$#" -eq 2 ]; then
-    COMMANDS_VALID=0
     _fail_contract $FUNCNAME "Please provide exactly one command and one expectation." "$@"
   fi
 
@@ -310,8 +298,7 @@ command_runner_add_with_expectation() {
 command_runner_run() {
   _set_output_options $FUNCNAME "$@"
 
-  _command_runner_check_commands &&
-    _command_runner_run_commands &&
+  _command_runner_run_commands &&
     _command_runner_print_errors &&
     _command_runner_print_summary &&
     _command_runner_validate
