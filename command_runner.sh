@@ -298,9 +298,10 @@ command_runner_run() {
     _command_runner_print_summary &&
     _command_runner_validate
 
-  # Store return value and reset results and outputs.
-  # This enables calling command_runner_run multiple times if needed.
   RETURN_VALUE=$?
+
+  # Reset results and outputs.
+  # This enables calling command_runner_run multiple times if needed.
   RESULTS=()
   OUTPUTS=()
 
