@@ -6,7 +6,7 @@
 SCRIPT_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 source "$SCRIPT_DIRECTORY/../command_runner.sh"
 
-command_runner_add ./$SCRIPT_DIRECTORY/commands/passing_command.sh
-command_runner_add ./$SCRIPT_DIRECTORY/commands/passing_command.sh
+command_runner_add "echo Hello"
+command_runner_add "echo World"
 
 command_runner_run "$@"

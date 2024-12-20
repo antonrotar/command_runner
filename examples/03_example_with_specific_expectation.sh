@@ -6,6 +6,6 @@
 SCRIPT_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 source "$SCRIPT_DIRECTORY/../command_runner.sh"
 
-command_runner_add_with_expectation ./$SCRIPT_DIRECTORY/commands/failing_command.sh 1
+command_runner_add_with_expectation "echo Output from failing command;exit 1" 1
 
 command_runner_run "$@"
