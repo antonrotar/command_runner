@@ -9,4 +9,4 @@ OUTPUT=$(command_runner_add arbitrary_command "arbitrary_unexpected_argument")
 
 expect_failure $?
 expect_log_contains "$OUTPUT" "command_runner_add arbitrary_command arbitrary_unexpected_argument"
-expect_log_contains "$OUTPUT" "Function does not accept additional arguments."
+expect_log_contains "$OUTPUT" "Please provide exactly one command."

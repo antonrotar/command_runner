@@ -9,4 +9,4 @@ OUTPUT=$(command_runner_add_with_expectation)
 
 expect_failure $?
 expect_log_contains "$OUTPUT" "command_runner_add_with_expectation"
-expect_log_contains "$OUTPUT" "Please provide a command."
+expect_log_contains "$OUTPUT" "Please provide exactly one command and one expectation."
