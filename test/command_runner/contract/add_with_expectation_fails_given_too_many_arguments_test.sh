@@ -9,4 +9,4 @@ OUTPUT=$(command_runner_add_with_expectation arbitrary_command 0 "arbitrary_unex
 
 expect_failure $?
 expect_log_contains "$OUTPUT" "command_runner_add_with_expectation arbitrary_command 0 arbitrary_unexpected_argument"
-expect_log_contains "$OUTPUT" "Please provide exactly one expectation."
+expect_log_contains "$OUTPUT" "Please provide exactly one command and one expectation."

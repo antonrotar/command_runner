@@ -267,14 +267,9 @@ _command_runner_print_summary() {
 # command_runner_add "ls -l"
 # The command is expected to return 0 to be counted as PASSED.
 command_runner_add() {
-  if [ "$#" -eq 0 ]; then
-    COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Please provide a command." "$@"
-  fi
-
   if [ ! "$#" -eq 1 ]; then
     COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Function does not accept additional arguments. If you want to provide an expectation, please use command_runner_add_with_expectation." "$@"
+    _fail_contract $FUNCNAME "Please provide exactly one command." "$@"
   fi
 
   COMMANDS+=("$1")
@@ -290,14 +285,9 @@ command_runner_add() {
 # command_runner_add_with_expectation "ls invalid_path -l" 2
 # The command is expected to return the given value to be counted as PASSED.
 command_runner_add_with_expectation() {
-  if [ "$#" -eq 0 ]; then
-    COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Please provide a command." "$@"
-  fi
-
   if [ ! "$#" -eq 2 ]; then
     COMMANDS_VALID=0
-    _fail_contract $FUNCNAME "Please provide exactly one expectation." "$@"
+    _fail_contract $FUNCNAME "Please provide exactly one command and one expectation." "$@"
   fi
 
   COMMANDS+=("$1")
