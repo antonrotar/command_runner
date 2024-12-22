@@ -101,17 +101,17 @@ _extract_specific_logs() {
 
 extract_logs() {
   _assert_argument_count $FUNCNAME 1 $#
-  _extract_specific_logs "$1" "Logs:" "Errors:" "Results:"
+  _extract_specific_logs "$1" "Running commands:" "Errors:" "Results:"
 }
 
 extract_errors() {
   _assert_argument_count $FUNCNAME 1 $#
-  _extract_specific_logs "$1" "Errors:" "Logs:" "Results:"
+  _extract_specific_logs "$1" "Errors:" "Running commands:" "Results:"
 }
 
 extract_results() {
   _assert_argument_count $FUNCNAME 1 $#
-  _extract_specific_logs "$1" "Results:" "Logs:" "Errors:"
+  _extract_specific_logs "$1" "Results:" "Running commands:" "Errors:"
 }
 
 passing_command() {
