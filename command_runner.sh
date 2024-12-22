@@ -140,10 +140,6 @@ _print_colored() {
 }
 
 _print_command() {
-  if [ ! "$#" -eq 3 ]; then
-    _fail_contract $FUNCNAME "Please provide color, command and expectation." "$@"
-  fi
-
   local COLOR="$1"
   local COMMAND="$2"
   local EXPECTATION="$3"
