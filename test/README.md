@@ -3,7 +3,7 @@ Each test is a standalone executable script which returns 0 if it passes and 1 i
 
 Each test script contains the most relevant part in its name and ends with `_test.sh`.
 
-`./run_all_tests.sh` is a script which will run all `_test.sh` scripts and print all failed tests.
+[./run_all_tests.sh](./run_all_tests.sh) is a script which will run all `_test.sh` scripts and print all failed tests.
 
 To execute all tests run:
 ```
