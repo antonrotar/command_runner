@@ -52,7 +52,8 @@ expect_log_empty() {
 
   local LOG="$1"
 
-  if [ ! -z "$LOG" ]; then
+  # -n tests for "not empty"
+  if [ -n "$LOG" ]; then
     echo "Expected log is empty. Actual log:"
     echo "$LOG"
     exit 1
@@ -67,8 +68,11 @@ expect_log_contains() {
   local LOG="$1"
   local EXPECTED_LOG="$2"
 
+  # q prevents grep from printing the match, Pz is necessary for multiline matching.
+  # Reference: https://stackoverflow.com/questions/152708/how-can-i-search-for-a-multiline-pattern-in-a-file
   echo "$LOG" | grep -qPz "$EXPECTED_LOG"
 
+  # If grep finds a match the return value will be 0.
   if [ "$?" -ne 0 ]; then
     echo "Expected log contains:"
     echo -e "$EXPECTED_LOG"
@@ -88,21 +92,22 @@ _extract_specific_logs() {
   local IRRELEVANT_LOG_1="$3"
   local IRRELEVANT_LOG_2="$4"
 
-  local IS_RELEVANT_LOG=false
+  local IS_RELEVANT_SECTION=false
 
+  # Iterate over the multiline log and only echo the relevant section.
   while IFS= read -r LINE; do
     case "$LINE" in
     *"$RELEVANT_LOG"*)
-      IS_RELEVANT_LOG=true
+      IS_RELEVANT_SECTION=true
       continue
       ;;
     *"$IRRELEVANT_LOG_1"* | *"$IRRELEVANT_LOG_2"*)
-      IS_RELEVANT_LOG=false
+      IS_RELEVANT_SECTION=false
       continue
       ;;
     esac
 
-    if [ "$IS_RELEVANT_LOG" = true ]; then
+    if [ "$IS_RELEVANT_SECTION" = true ]; then
       echo $LINE
     fi
   done <<<"$LOG"
