@@ -40,6 +40,14 @@ COLORED_OUTPUT=1    # Use colors in command runner output.
 VERBOSE=0           # Print all command outputs AFTER execution.
 STREAMED=0          # Print all command outputs DURING execution.
 
+# Color codes
+WHITE="0;0"
+NORMAL_RED="0;31"
+BOLD_RED="1;31"
+NORMAL_GREEN="0;32"
+NORMAL_CYAN="0;36"
+BOLD_LIGHT_CYAN="1;96"
+
 # Private functions.
 #
 # Helper function for contract guard clause. Prints error log and exits the script.
@@ -132,35 +140,38 @@ _print_colored() {
 }
 
 _print_command() {
-  local NORMAL_CYAN="0;36"
-  _print_colored "$NORMAL_CYAN" "$@"
+  if [ ! "$#" -eq 3 ]; then
+    _fail_contract $FUNCNAME "Please provide exactly one command and one expectation." "$@"
+  fi
+
+  local COLOR="$1"
+  local COMMAND="$2"
+  local EXPECTATION="$3"
+
+  _print_colored "$COLOR" "$COMMAND" "$EXPECTATION"
 
   return 0
 }
 
 _print_failed_command() {
-  local NORMAL_RED="0;31"
-  _print_colored "$NORMAL_RED" "$@"
+  _print_command "$NORMAL_RED" "$@"
 
   return 0
 }
 
 _print_info() {
-  local BOLD_LIGHT_CYAN="1;96"
   _print_colored "$BOLD_LIGHT_CYAN" "$1"
 
   return 0
 }
 
 _print_passed() {
-  local NORMAL_GREEN="0;32"
   _print_colored "$NORMAL_GREEN" "PASSED"
 
   return 0
 }
 
 _print_failed() {
-  local BOLD_RED="1;31"
   _print_colored "$BOLD_RED" "FAILED"
 
   return 0
@@ -171,7 +182,7 @@ _print_failed() {
 # The output is printed given the different output options.
 # The result is stored for later evaluation.
 _run_command_and_store_result() {
-  _print_command "$@"
+  _print_command "$NORMAL_CYAN" "$@"
   local OUTPUT=""
 
   if [ "$STREAMED" -eq 1 ]; then
@@ -241,9 +252,9 @@ _command_runner_print_summary() {
 
   for i in "${!RESULTS[@]}"; do
     if [ "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
-      echo -e "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}" "$(_print_passed)"
+      echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_print_passed)"
     else
-      echo -e "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}" "$(_print_failed)"
+      echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_print_failed)"
     fi
   done
 
