@@ -210,7 +210,7 @@ _run_command_and_store_result() {
 
 # Run all stored commands, print them and store the results.
 _command_runner_run_commands() {
-  _print_info "Logs:"
+  _print_info "Running commands:"
 
   for i in "${!COMMANDS[@]}"; do
     _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
