@@ -24,7 +24,9 @@ _assert_argument_count() {
 expect_success() {
   _assert_argument_count $FUNCNAME 1 $#
 
-  if [ "$1" -ne 0 ]; then
+  local RETURN_VALUE="$1"
+
+  if [ "$RETURN_VALUE" -ne 0 ]; then
     echo "Should pass, but fails."
     exit 1
   fi
@@ -35,7 +37,9 @@ expect_success() {
 expect_failure() {
   _assert_argument_count $FUNCNAME 1 $#
 
-  if [ "$1" -eq 0 ]; then
+  local RETURN_VALUE="$1"
+
+  if [ "$RETURN_VALUE" -eq 0 ]; then
     echo "Should fail, but passes."
     exit 1
   fi
@@ -46,9 +50,11 @@ expect_failure() {
 expect_log_empty() {
   _assert_argument_count $FUNCNAME 1 $#
 
-  if [ ! -z "$1" ]; then
+  local LOG="$1"
+
+  if [ ! -z "$LOG" ]; then
     echo "Expected log is empty. Actual log:"
-    echo "$1"
+    echo "$LOG"
     exit 1
   fi
 
@@ -58,13 +64,16 @@ expect_log_empty() {
 expect_log_contains() {
   _assert_argument_count $FUNCNAME 2 $#
 
-  echo "$1" | grep -qPz "$2"
+  local LOG="$1"
+  local EXPECTED_LOG="$2"
+
+  echo "$LOG" | grep -qPz "$EXPECTED_LOG"
 
   if [ "$?" -ne 0 ]; then
     echo "Expected log contains:"
-    echo -e "$2"
+    echo -e "$EXPECTED_LOG"
     echo "Actual log:"
-    echo -e "$1"
+    echo -e "$LOG"
     exit 1
   fi
 
@@ -101,17 +110,26 @@ _extract_specific_logs() {
 
 extract_logs() {
   _assert_argument_count $FUNCNAME 1 $#
-  _extract_specific_logs "$1" "Running commands:" "Errors:" "Results:"
+
+  local LOG="$1"
+
+  _extract_specific_logs "$LOG" "Running commands:" "Errors:" "Results:"
 }
 
 extract_errors() {
   _assert_argument_count $FUNCNAME 1 $#
-  _extract_specific_logs "$1" "Errors:" "Running commands:" "Results:"
+
+  local LOG="$1"
+
+  _extract_specific_logs "$LOG" "Errors:" "Running commands:" "Results:"
 }
 
 extract_results() {
   _assert_argument_count $FUNCNAME 1 $#
-  _extract_specific_logs "$1" "Results:" "Running commands:" "Errors:"
+
+  local LOG="$1"
+
+  _extract_specific_logs "$LOG" "Results:" "Running commands:" "Errors:"
 }
 
 passing_command() {
