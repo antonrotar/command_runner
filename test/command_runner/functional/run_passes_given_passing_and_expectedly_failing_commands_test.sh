@@ -11,6 +11,6 @@ command_runner_add_with_expectation failing_command 1
 OUTPUT=$(command_runner_run)
 
 expect_success $?
-expect_log_contains "$(extract_logs "$OUTPUT")" "passing_command 0\nfailing_command 1"
+expect_log_contains "$(extract_logs "$OUTPUT")" "passing_command\nfailing_command 1"
 expect_log_empty "$(extract_errors "$OUTPUT")"
-expect_log_contains "$(extract_results "$OUTPUT")" "passing_command 0 PASSED\nfailing_command 1 PASSED"
+expect_log_contains "$(extract_results "$OUTPUT")" "passing_command PASSED\nfailing_command 1 PASSED"

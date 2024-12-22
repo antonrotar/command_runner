@@ -148,8 +148,11 @@ _print_command() {
   local COMMAND="$2"
   local EXPECTATION="$3"
 
-  _print_colored "$COLOR" "$COMMAND" "$EXPECTATION"
-
+  if [ "$EXPECTATION" -eq 0 ]; then
+    _print_colored "$COLOR" "$COMMAND"
+  else
+    _print_colored "$COLOR" "$COMMAND" "$EXPECTATION"
+  fi
   return 0
 }
 
