@@ -6,7 +6,7 @@
 SCRIPT_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 source "$SCRIPT_DIRECTORY/../command_runner.sh"
 
-command_runner_add "echo Output from failing command;exit 1"
+command_runner_add "echo Output from failing command;/bin/false"
 command_runner_add "echo Output from passing command"
 
 command_runner_run "$@"
