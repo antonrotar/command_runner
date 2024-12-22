@@ -141,7 +141,7 @@ _print_colored() {
 
 _print_command() {
   if [ ! "$#" -eq 3 ]; then
-    _fail_contract $FUNCNAME "Please provide exactly one command and one expectation." "$@"
+    _fail_contract $FUNCNAME "Please provide color, command and expectation." "$@"
   fi
 
   local COLOR="$1"
