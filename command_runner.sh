@@ -57,7 +57,7 @@ _fail_contract() {
   shift
   shift
 
-  echo -e "$(_print_failed)" "$FUNCTION_NAME $@"
+  echo -e "$(_print_failed)" "$FUNCTION_NAME" "$@"
   echo $ERROR_LOG
 
   exit 1
@@ -193,7 +193,7 @@ _run_command_and_store_result() {
     OUTPUT="$(eval "$1" "2>&1")"
   fi
 
-  # This line must come directly after the "eval" call. Else "$?"" might already be overwritten.
+  # This line must come directly after the "eval" call. Else "$?" might already be overwritten.
   RESULTS+=("$?")
   OUTPUTS+=("$OUTPUT")
 
