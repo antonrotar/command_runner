@@ -112,6 +112,7 @@ _print_command() {
   else
     _print_colored "$COLOR" "$COMMAND" "$EXPECTATION"
   fi
+
   return 0
 }
 
