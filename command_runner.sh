@@ -179,7 +179,7 @@ _command_runner_run_commands() {
 # This function evaluates if all commands have the expected results.
 _command_runner_evaluate() {
   for i in "${!RESULTS[@]}"; do
-    if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
+    if [ "${RESULTS[$i]}" -ne "${EXPECTED_RESULTS[$i]}" ]; then
       return 1
     fi
   done
@@ -193,7 +193,7 @@ _command_runner_print_errors() {
   _print_info "Errors:"
 
   for i in "${!RESULTS[@]}"; do
-    if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
+    if [ "${RESULTS[$i]}" -ne "${EXPECTED_RESULTS[$i]}" ]; then
       _print_command "$NORMAL_RED" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
       echo "${OUTPUTS[$i]}"
     fi
@@ -225,7 +225,7 @@ _command_runner_print_summary() {
 # command_runner_add "ls -l"
 # The command is expected to return 0 to be counted as PASSED.
 command_runner_add() {
-  if [ ! "$#" -eq 1 ]; then
+  if [ "$#" -ne 1 ]; then
     _fail_contract $FUNCNAME "Please provide exactly one command." "$@"
   fi
 
@@ -242,7 +242,7 @@ command_runner_add() {
 # command_runner_add_with_expectation "ls invalid_path -l" 2
 # The command is expected to return the given value to be counted as PASSED.
 command_runner_add_with_expectation() {
-  if [ ! "$#" -eq 2 ]; then
+  if [ "$#" -ne 2 ]; then
     _fail_contract $FUNCNAME "Please provide exactly one command and one expectation." "$@"
   fi
 
