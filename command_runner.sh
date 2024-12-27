@@ -141,7 +141,7 @@ _print_failed() {
 }
 
 # This is the main function of the whole script.
-# Commands are printed and executed here.
+# Commands are executed here.
 # The output is printed given the different output options.
 # The result is stored for later evaluation.
 _run_command_and_store_result() {
