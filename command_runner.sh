@@ -152,7 +152,7 @@ _run_command_and_store_result() {
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
-    eval "$1"
+    eval "$1" "2>&1"
   else
     OUTPUT="$(eval "$1" "2>&1")"
   fi
