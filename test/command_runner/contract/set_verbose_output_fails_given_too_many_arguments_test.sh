@@ -5,8 +5,8 @@ source "$SCRIPT_DIRECTORY/../../support/support.sh"
 
 source_command_runner
 
-OUTPUT=$(command_runner_set_verbose "arbitrary_unexpected_argument")
+OUTPUT=$(command_runner_set_verbose_output "arbitrary_unexpected_argument")
 
 expect_failure $?
-expect_log_contains "$OUTPUT" "command_runner_set_verbose arbitrary_unexpected_argument"
+expect_log_contains "$OUTPUT" "command_runner_set_verbose_output arbitrary_unexpected_argument"
 expect_log_contains "$OUTPUT" "Unexpected arguments."
