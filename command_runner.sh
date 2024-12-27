@@ -296,14 +296,8 @@ command_runner_run() {
   return $RETURN_VALUE
 }
 
-# Use this function to specify if colored output should be used.
-# command_runner_set_colored_output
-# is equivalent to
-# command_runner_set_colored_output 1
-# and will enable colored output.
-# command_runner_set_colored_output 0
-# will disable it.
-command_runner_set_colored_output() {
+# Use this function to disable colored output.
+command_runner_disable_colored_output() {
   if [ "$#" -ne 0 ]; then
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi

@@ -5,7 +5,7 @@ source "$SCRIPT_DIRECTORY/../../support/support.sh"
 
 source_command_runner
 
-OUTPUT=$(command_runner_set_colored_output)
+OUTPUT=$(command_runner_disable_colored_output)
 
 expect_success $?
 expect_log_empty "$OUTPUT"
