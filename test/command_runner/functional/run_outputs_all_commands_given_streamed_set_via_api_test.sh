@@ -8,7 +8,7 @@ source_command_runner
 command_runner_add passing_command
 command_runner_add failing_command
 
-command_runner_set_streamed
+command_runner_set_streamed_output
 
 OUTPUT=$(command_runner_run)
 

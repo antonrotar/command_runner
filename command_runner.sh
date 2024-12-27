@@ -67,12 +67,12 @@ _fail_contract() {
   exit 1
 }
 
-_command_runner_set_verbose() {
+_command_runner_set_verbose_output() {
   CURRENT_OUTPUT=$VERBOSE_OUTPUT
   return 0
 }
 
-_command_runner_set_streamed() {
+_command_runner_set_streamed_output() {
   CURRENT_OUTPUT=$STREAMED_OUTPUT
   return 0
 }
@@ -85,9 +85,9 @@ _set_output_options() {
 
   if [ "$#" -eq 1 ]; then
     if [[ "$1" == '-v' ]]; then
-      command_runner_set_verbose
+      command_runner_set_verbose_output
     elif [[ "$1" == '-s' ]]; then
-      command_runner_set_streamed
+      command_runner_set_streamed_output
     else
       _fail_contract $CALLING_FUNCTION "Unexpected argument. Please use -v or -s." "$@"
     fi
@@ -311,12 +311,12 @@ command_runner_disable_colored_output() {
 # Verbose output means that the logs of all commands will be printed
 # AFTER execution. Otherwise only the logs of failed commands will be printed.
 # The output can either be verbose OR streamed, not both.
-command_runner_set_verbose() {
+command_runner_set_verbose_output() {
   if [ "$#" -ne 0 ]; then
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
 
-  _command_runner_set_verbose
+  _command_runner_set_verbose_output
 
   return 0
 }
@@ -326,12 +326,12 @@ command_runner_set_verbose() {
 # DURING execution. This is helpful if you want to observe the output
 # of long running commands.
 # The output can either be verbose OR streamed, not both.
-command_runner_set_streamed() {
+command_runner_set_streamed_output() {
   if [ "$#" -ne 0 ]; then
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
 
-  _command_runner_set_streamed
+  _command_runner_set_streamed_output
 
   return 0
 }
