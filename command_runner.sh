@@ -307,15 +307,10 @@ command_runner_disable_colored_output() {
   return 0
 }
 
-# Use this function to specify if verbose output should be used.
+# Use this function to enable verbose output.
 # Verbose output means that the logs of all commands will be printed
 # AFTER execution. Otherwise only the logs of failed commands will be printed.
-# command_runner_set_verbose
-# is equivalent to
-# command_runner_set_verbose 1
-# and will enable verbose output.
-# command_runner_set_verbose 0
-# will disable it.
+# The output can either be verbose OR streamed, not both.
 command_runner_set_verbose() {
   if [ "$#" -ne 0 ]; then
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
@@ -326,16 +321,11 @@ command_runner_set_verbose() {
   return 0
 }
 
-# Use this function to specify if streamed output should be used.
+# Use this function to enable streamed output.
 # Streamed output means that the logs of all commands will be printed
 # DURING execution. This is helpful if you want to observe the output
 # of long running commands.
-# command_runner_set_streamed
-# is equivalent to
-# command_runner_set_streamed 1
-# and will enable streamed output.
-# command_runner_set_streamed 0
-# will disable it.
+# The output can either be verbose OR streamed, not both.
 command_runner_set_streamed() {
   if [ "$#" -ne 0 ]; then
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
