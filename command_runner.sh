@@ -116,12 +116,6 @@ _print_command() {
   return 0
 }
 
-_print_failed_command() {
-  _print_command "$NORMAL_RED" "$@"
-
-  return 0
-}
-
 _print_info() {
   _print_colored "$BOLD_LIGHT_CYAN" "$1"
 
@@ -200,7 +194,7 @@ _command_runner_print_errors() {
 
   for i in "${!RESULTS[@]}"; do
     if [ ! "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
-      _print_failed_command "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
+      _print_command "$NORMAL_RED" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
       echo "${OUTPUTS[$i]}"
     fi
   done
