@@ -36,9 +36,13 @@ COMMANDS=()         # Commands to be executed collected via the "add" functions.
 RESULTS=()          # Return codes of the commands after execution.
 OUTPUTS=()          # Output logs of the commands after execution.
 EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expectation.
-COLORED_OUTPUT=1    # Use colors in command runner output.
-VERBOSE=0           # Print all command outputs AFTER execution.
-STREAMED=0          # Print all command outputs DURING execution.
+
+# Output options
+COLORED_OUTPUT=1  # Use colors in command runner output.
+REGULAR_OUTPUT=0  # Print failed command outputs only.
+VERBOSE_OUTPUT=1  # Print all command outputs AFTER execution.
+STREAMED_OUTPUT=2 # Print all command outputs DURING execution.
+CURRENT_OUTPUT=$REGULAR_OUTPUT
 
 # Color codes
 WHITE="0;0"
@@ -63,27 +67,13 @@ _fail_contract() {
   exit 1
 }
 
-# If both verbose and streamed options are set, the behavior might be unexpected.
-# This function ensures only one option is set to 1.
 _command_runner_set_verbose() {
-  VERBOSE="$1"
-
-  if [ "$1" -eq 1 ]; then
-    STREAMED=0
-  fi
-
+  CURRENT_OUTPUT=$VERBOSE_OUTPUT
   return 0
 }
 
-# If both verbose and streamed options are set, the behavior might be unexpected.
-# This function ensures only one option is set to 1.
 _command_runner_set_streamed() {
-  STREAMED="$1"
-
-  if [ "$1" -eq 1 ]; then
-    VERBOSE=0
-  fi
-
+  CURRENT_OUTPUT=$STREAMED_OUTPUT
   return 0
 }
 
@@ -95,31 +85,14 @@ _set_output_options() {
 
   if [ "$#" -eq 1 ]; then
     if [[ "$1" == '-v' ]]; then
-      command_runner_set_verbose 1
+      command_runner_set_verbose
     elif [[ "$1" == '-s' ]]; then
-      command_runner_set_streamed 1
+      command_runner_set_streamed
     else
       _fail_contract $CALLING_FUNCTION "Unexpected argument. Please use -v or -s." "$@"
     fi
   elif [ "$#" -gt 1 ]; then
     _fail_contract $CALLING_FUNCTION "Unexpected arguments. Please use -v or -s." "$@"
-  fi
-
-  return 0
-}
-
-# Helper function for output settings functions argument handling.
-# Verifies that either no option or one of [0, 1] is set.
-_get_output_option() {
-  CALLING_FUNCTION="$1"
-  shift
-
-  if [ "$#" -eq 0 ]; then
-    return 1
-  elif [ "$#" -eq 1 ] && [ "$1" -eq 0 -o "$1" -eq 1 ]; then
-    return "$1"
-  else
-    _fail_contract $CALLING_FUNCTION "Unexpected arguments." "$@"
   fi
 
   return 0
@@ -184,7 +157,7 @@ _run_command_and_store_result() {
   _print_command "$NORMAL_CYAN" "$@"
   local OUTPUT=""
 
-  if [ "$STREAMED" -eq 1 ]; then
+  if [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
@@ -197,7 +170,7 @@ _run_command_and_store_result() {
   RESULTS+=("$?")
   OUTPUTS+=("$OUTPUT")
 
-  if [ "$VERBOSE" -eq 1 ]; then
+  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
     echo "$OUTPUT"
   fi
 
@@ -331,8 +304,11 @@ command_runner_run() {
 # command_runner_set_colored_output 0
 # will disable it.
 command_runner_set_colored_output() {
-  _get_output_option $FUNCNAME "$@"
-  COLORED_OUTPUT=$?
+  if [ "$#" -ne 0 ]; then
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
+  COLORED_OUTPUT=0
 
   return 0
 }
@@ -347,8 +323,11 @@ command_runner_set_colored_output() {
 # command_runner_set_verbose 0
 # will disable it.
 command_runner_set_verbose() {
-  _get_output_option $FUNCNAME "$@"
-  _command_runner_set_verbose $?
+  if [ "$#" -ne 0 ]; then
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
+  _command_runner_set_verbose
 
   return 0
 }
@@ -364,8 +343,11 @@ command_runner_set_verbose() {
 # command_runner_set_streamed 0
 # will disable it.
 command_runner_set_streamed() {
-  _get_output_option $FUNCNAME "$@"
-  _command_runner_set_streamed $?
+  if [ "$#" -ne 0 ]; then
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
+  _command_runner_set_streamed
 
   return 0
 }
