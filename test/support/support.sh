@@ -152,6 +152,11 @@ failing_command() {
   return 1
 }
 
+failing_command_that_prints_to_error_log() {
+  >&2 echo "Output from failing command"
+  return 1
+}
+
 arbitrary_command() {
   passing_command
 }
