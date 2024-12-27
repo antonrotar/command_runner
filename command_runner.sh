@@ -67,16 +67,6 @@ _fail_contract() {
   exit 1
 }
 
-_command_runner_set_verbose_output() {
-  CURRENT_OUTPUT=$VERBOSE_OUTPUT
-  return 0
-}
-
-_command_runner_set_streamed_output() {
-  CURRENT_OUTPUT=$STREAMED_OUTPUT
-  return 0
-}
-
 # Helper function for command_runner_run argument handling.
 # Verifies that either no option or one of [-v, -s] is set.
 _set_output_options() {
@@ -316,7 +306,7 @@ command_runner_set_verbose_output() {
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
 
-  _command_runner_set_verbose_output
+  CURRENT_OUTPUT=$VERBOSE_OUTPUT
 
   return 0
 }
@@ -331,7 +321,7 @@ command_runner_set_streamed_output() {
     _fail_contract $FUNCNAME "Unexpected arguments." "$@"
   fi
 
-  _command_runner_set_streamed_output
+  CURRENT_OUTPUT=$STREAMED_OUTPUT
 
   return 0
 }
