@@ -5,7 +5,7 @@ source_command_runner() {
   source "$SCRIPT_DIRECTORY/../../command_runner.sh"
 
   # Disable colored output to allow exact string matching on output logs.
-  command_runner_set_colored_output 0
+  command_runner_set_colored_output
 }
 
 _assert_argument_count() {
