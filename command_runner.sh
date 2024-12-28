@@ -177,6 +177,12 @@ _run_command_and_store_result() {
   # This line must come directly after the "eval" call. Else "$?" might already be overwritten.
   local STATUS_CODE="$?"
 
+  OUTPUTS+=("$OUTPUT")
+
+  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
+    echo "$OUTPUT"
+  fi
+
   if [ "$STATUS_CODE" -eq "$EXPECTED_RESULT" ]; then
     RESULTS+=($COMMAND_PASSED)
   else
@@ -187,12 +193,6 @@ _run_command_and_store_result() {
       SKIP_REMAINING_COMMANDS=1
     fi
 
-  fi
-
-  OUTPUTS+=("$OUTPUT")
-
-  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
-    echo "$OUTPUT"
   fi
 
   return 0
