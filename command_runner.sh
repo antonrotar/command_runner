@@ -70,7 +70,7 @@ _fail_contract() {
 # Helper function for command_runner_run argument handling.
 # Verifies that either no option or one of [-v, -s] is set.
 _set_output_options() {
-  CALLING_FUNCTION="$1"
+  local CALLING_FUNCTION="$1"
   shift
 
   if [ "$#" -eq 1 ]; then
