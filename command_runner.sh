@@ -34,7 +34,9 @@
 # Variables and states.
 COMMANDS=()         # Commands to be executed collected via the "add" functions.
 EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expectation.
-RESULTS=()          # Return codes of the commands after execution.
+COMMAND_PASSED=0    # Status code for command if result was as expected.
+COMMAND_FAILED=1    # Status code for command if result was not as expected.
+RESULTS=()          # Status codes of the commands after execution.
 OUTPUTS=()          # Output logs of the commands after execution.
 
 # Output options
@@ -159,7 +161,12 @@ _run_command_and_store_result() {
   # This line must come directly after the "eval" call. Else "$?" might already be overwritten.
   local STATUS_CODE="$?"
 
-  RESULTS+=($STATUS_CODE)
+  if [ "$STATUS_CODE" -eq "$EXPECTED_RESULT" ]; then
+    RESULTS+=($COMMAND_PASSED)
+  else
+    RESULTS+=($COMMAND_FAILED)
+  fi
+
   OUTPUTS+=("$OUTPUT")
 
   if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
@@ -186,7 +193,7 @@ _command_runner_run_commands() {
 # This function evaluates if all commands have the expected results.
 _command_runner_evaluate() {
   for i in "${!RESULTS[@]}"; do
-    if [ "${RESULTS[$i]}" -ne "${EXPECTED_RESULTS[$i]}" ]; then
+    if [ "${RESULTS[$i]}" -ne "$COMMAND_PASSED" ]; then
       return 1
     fi
   done
@@ -200,7 +207,7 @@ _command_runner_print_errors() {
   _print_info "Errors:"
 
   for i in "${!RESULTS[@]}"; do
-    if [ "${RESULTS[$i]}" -ne "${EXPECTED_RESULTS[$i]}" ]; then
+    if [ "${RESULTS[$i]}" -ne "$COMMAND_PASSED" ]; then
       _print_command "$NORMAL_RED" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
       echo "${OUTPUTS[$i]}"
     fi
@@ -215,7 +222,7 @@ _command_runner_print_summary() {
   _print_info "Results:"
 
   for i in "${!RESULTS[@]}"; do
-    if [ "${RESULTS[$i]}" -eq "${EXPECTED_RESULTS[$i]}" ]; then
+    if [ "${RESULTS[$i]}" -eq "$COMMAND_PASSED" ]; then
       echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_print_passed)"
     else
       echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_print_failed)"
