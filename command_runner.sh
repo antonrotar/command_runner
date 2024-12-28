@@ -192,8 +192,8 @@ _command_runner_run_commands() {
 #
 # This function evaluates if all commands have the expected results.
 _command_runner_evaluate() {
-  for i in "${!RESULTS[@]}"; do
-    if [ "${RESULTS[$i]}" -ne "$COMMAND_PASSED" ]; then
+  for RESULT in "${RESULTS[@]}"; do
+    if [ "$RESULT" -ne "$COMMAND_PASSED" ]; then
       return 1
     fi
   done
