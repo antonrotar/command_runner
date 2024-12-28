@@ -33,9 +33,9 @@
 #
 # Variables and states.
 COMMANDS=()         # Commands to be executed collected via the "add" functions.
+EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expectation.
 RESULTS=()          # Return codes of the commands after execution.
 OUTPUTS=()          # Output logs of the commands after execution.
-EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expectation.
 
 # Output options
 COLORED_OUTPUT=1  # Use colors in command runner output.
