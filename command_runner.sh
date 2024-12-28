@@ -152,7 +152,9 @@ _run_command_and_store_result() {
   fi
 
   # This line must come directly after the "eval" call. Else "$?" might already be overwritten.
-  RESULTS+=("$?")
+  local STATUS_CODE="$?"
+
+  RESULTS+=($STATUS_CODE)
   OUTPUTS+=("$OUTPUT")
 
   if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
