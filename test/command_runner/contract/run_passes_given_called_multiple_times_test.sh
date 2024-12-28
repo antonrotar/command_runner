@@ -5,7 +5,8 @@ source "$SCRIPT_DIRECTORY/../../support/support.sh"
 
 source_command_runner
 
-command_runner_run
+command_runner_run >/dev/null
+expect_success $?
 
 OUTPUT=$(command_runner_run)
 
