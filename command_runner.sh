@@ -32,12 +32,15 @@
 # Implementation.
 #
 # Variables and states.
-COMMANDS=()         # Commands to be executed collected via the "add" functions.
-EXPECTED_RESULTS=() # Optional expected return codes. 0 is set as default expectation.
-COMMAND_PASSED=0    # Status code for command if result was as expected.
-COMMAND_FAILED=1    # Status code for command if result was not as expected.
-RESULTS=()          # Status codes of the commands after execution.
-OUTPUTS=()          # Output logs of the commands after execution.
+COMMANDS=()               # Commands to be executed collected via the "add" functions.
+EXPECTED_RESULTS=()       # Optional expected return codes. 0 is set as default expectation.
+SHOULD_STOP_ON_FAILURE=0  # Will stop execution after first failure. Per default all commands are executed.
+SKIP_REMAINING_COMMANDS=0 # Used to skip remaining commands.
+COMMAND_PASSED=0          # Status code for command if result was as expected.
+COMMAND_FAILED=1          # Status code for command if result was not as expected.
+COMMAND_SKIPPED=2         # Status code for command if command was skipped.
+RESULTS=()                # Status codes of the commands after execution.
+OUTPUTS=()                # Output logs of the commands after execution.
 
 # Output options
 COLORED_OUTPUT=1  # Use colors in command runner output.
@@ -53,6 +56,7 @@ BOLD_RED="1;31"
 NORMAL_GREEN="0;32"
 NORMAL_CYAN="0;36"
 BOLD_LIGHT_CYAN="1;96"
+NORMAL_LIGHT_YELLOW="0;93"
 
 # Private functions.
 #
@@ -138,6 +142,12 @@ _print_failed() {
   return 0
 }
 
+_print_skipped() {
+  _print_colored "$NORMAL_LIGHT_YELLOW" "SKIPPED"
+
+  return 0
+}
+
 # This is the main function of the whole script.
 # Commands are executed here.
 # The output is printed given the different output options.
@@ -148,6 +158,12 @@ _run_command_and_store_result() {
   local OUTPUT=""
 
   _print_command "$NORMAL_CYAN" "$COMMAND" "$EXPECTED_RESULT"
+
+  if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
+    RESULTS+=($COMMAND_SKIPPED)
+    OUTPUTS+=("")
+    return 0
+  fi
 
   if [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
@@ -165,6 +181,12 @@ _run_command_and_store_result() {
     RESULTS+=($COMMAND_PASSED)
   else
     RESULTS+=($COMMAND_FAILED)
+
+    if [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
+      _print_colored "$NORMAL_LIGHT_YELLOW" "STOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS."
+      SKIP_REMAINING_COMMANDS=1
+    fi
+
   fi
 
   OUTPUTS+=("$OUTPUT")
@@ -220,6 +242,7 @@ _get_summary_message() {
   case "$RESULT" in
   "$COMMAND_PASSED") _print_passed ;;
   "$COMMAND_FAILED") _print_failed ;;
+  "$COMMAND_SKIPPED") _print_skipped ;;
   esac
 
   return 0
@@ -300,6 +323,18 @@ command_runner_run() {
   return $RETURN_VALUE
 }
 
+# Use this function to skip remaining commands after first failure.
+# This is useful if commands depend on each other like in installation scripts
+# or if you want to save runtime in the failure case.
+command_runner_stop_on_failure() {
+  if [ "$#" -ne 0 ]; then
+    _fail_contract $FUNCNAME "Unexpected arguments." "$@"
+  fi
+
+  SHOULD_STOP_ON_FAILURE=1
+
+  return 0
+}
 # Use this function to disable colored output.
 command_runner_disable_colored_output() {
   if [ "$#" -ne 0 ]; then
