@@ -187,13 +187,10 @@ _command_runner_run_commands() {
   return 0
 }
 
-# The three functions below have similar code but are kept separate on purpose.
-# They represent different semantical concepts and might change at different times for different reasons.
-#
-# This function evaluates if all commands have the expected results.
+# This function evaluates if any command has failed.
 _command_runner_evaluate() {
   for RESULT in "${RESULTS[@]}"; do
-    if [ "$RESULT" -ne "$COMMAND_PASSED" ]; then
+    if [ "$RESULT" -eq "$COMMAND_FAILED" ]; then
       return 1
     fi
   done
@@ -207,7 +204,7 @@ _command_runner_print_errors() {
   _print_info "Errors:"
 
   for i in "${!RESULTS[@]}"; do
-    if [ "${RESULTS[$i]}" -ne "$COMMAND_PASSED" ]; then
+    if [ "${RESULTS[$i]}" -eq "$COMMAND_FAILED" ]; then
       _print_command "$NORMAL_RED" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
       echo "${OUTPUTS[$i]}"
     fi
