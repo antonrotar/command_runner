@@ -213,17 +213,25 @@ _command_runner_print_errors() {
   return 0
 }
 
+# Prints summary message corresponding to command result.
+_get_summary_message() {
+  local RESULT=$1
+
+  case "$RESULT" in
+  "$COMMAND_PASSED") _print_passed ;;
+  "$COMMAND_FAILED") _print_failed ;;
+  esac
+
+  return 0
+}
+
 # This function prints a summary over all executed commands.
 _command_runner_print_summary() {
   echo
   _print_info "Results:"
 
   for i in "${!RESULTS[@]}"; do
-    if [ "${RESULTS[$i]}" -eq "$COMMAND_PASSED" ]; then
-      echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_print_passed)"
-    else
-      echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_print_failed)"
-    fi
+    echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_get_summary_message "${RESULTS[$i]}")"
   done
 
   return 0
