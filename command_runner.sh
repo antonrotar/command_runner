@@ -117,7 +117,9 @@ _print_command() {
 }
 
 _print_info() {
-  _print_colored "$BOLD_LIGHT_CYAN" "$1"
+  local INFO_MESSAGE="$1"
+
+  _print_colored "$BOLD_LIGHT_CYAN" "$INFO_MESSAGE"
 
   return 0
 }
@@ -139,16 +141,19 @@ _print_failed() {
 # The output is printed given the different output options.
 # The result is stored for later evaluation.
 _run_command_and_store_result() {
-  _print_command "$NORMAL_CYAN" "$@"
+  local COMMAND="$1"
+  local EXPECTED_RESULT="$2"
   local OUTPUT=""
+
+  _print_command "$NORMAL_CYAN" "$COMMAND" "$EXPECTED_RESULT"
 
   if [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
-    eval "$1" "2>&1"
+    eval "$COMMAND" "2>&1"
   else
-    OUTPUT="$(eval "$1" "2>&1")"
+    OUTPUT="$(eval "$COMMAND" "2>&1")"
   fi
 
   # This line must come directly after the "eval" call. Else "$?" might already be overwritten.
