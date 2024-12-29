@@ -155,6 +155,7 @@ _print_skipped() {
 _run_command_and_store_result() {
   local COMMAND="$1"
   local EXPECTED_RESULT="$2"
+  local STATUS_CODE=255
   local OUTPUT=""
 
   _print_command "$NORMAL_CYAN" "$COMMAND" "$EXPECTED_RESULT"
@@ -170,12 +171,11 @@ _run_command_and_store_result() {
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
     eval "$COMMAND" "2>&1"
+    STATUS_CODE=$?
   else
     OUTPUT="$(eval "$COMMAND" "2>&1")"
+    STATUS_CODE=$?
   fi
-
-  # This line must come directly after the "eval" call. Else "$?" might already be overwritten.
-  local STATUS_CODE="$?"
 
   OUTPUTS+=("$OUTPUT")
 
