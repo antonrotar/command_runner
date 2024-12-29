@@ -173,13 +173,14 @@ _run_command_and_store_result() {
   else
     OUTPUT="$(eval "$COMMAND" "2>&1")"
     STATUS_CODE=$?
+
+    if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
+      echo "$OUTPUT"
+    fi
+
   fi
 
   OUTPUTS+=("$OUTPUT")
-
-  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
-    echo "$OUTPUT"
-  fi
 
   if [ "$STATUS_CODE" -eq "$EXPECTED_RESULT" ]; then
     RESULTS+=($COMMAND_PASSED)
