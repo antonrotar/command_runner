@@ -154,7 +154,7 @@ _print_skipped() {
 # The result is stored for later evaluation.
 _run_command_and_store_result() {
   local COMMAND="$1"
-  local EXPECTED_RESULT="$2"
+  local EXPECTED_STATUS_CODE="$2"
   local STATUS_CODE=255
   local OUTPUT=""
 
@@ -182,7 +182,7 @@ _run_command_and_store_result() {
 
   OUTPUTS+=("$OUTPUT")
 
-  if [ "$STATUS_CODE" -eq "$EXPECTED_RESULT" ]; then
+  if [ "$STATUS_CODE" -eq "$EXPECTED_STATUS_CODE" ]; then
     RESULTS+=($COMMAND_PASSED)
   else
     RESULTS+=($COMMAND_FAILED)
