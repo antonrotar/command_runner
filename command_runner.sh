@@ -158,8 +158,6 @@ _run_command_and_store_result() {
   local STATUS_CODE=255
   local OUTPUT=""
 
-  _print_command "$NORMAL_CYAN" "$COMMAND" "$EXPECTED_RESULT"
-
   if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
     RESULTS+=($COMMAND_SKIPPED)
     OUTPUTS+=("")
@@ -203,6 +201,7 @@ _command_runner_run_commands() {
   _print_info "Running commands:"
 
   for i in "${!COMMANDS[@]}"; do
+    _print_command "$NORMAL_CYAN" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
     _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
   done
 
