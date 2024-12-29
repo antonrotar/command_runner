@@ -6,6 +6,7 @@ source "$SCRIPT_DIRECTORY/../../support/support.sh"
 source_command_runner
 
 command_runner_stop_on_failure
+
 command_runner_add passing_command
 command_runner_add another_passing_command
 
