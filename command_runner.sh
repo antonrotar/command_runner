@@ -171,10 +171,7 @@ _run_command_and_store_result() {
   if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
     RESULTS+=($COMMAND_SKIPPED)
     OUTPUTS+=("")
-    return 0
-  fi
-
-  if [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
+  elif [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
@@ -187,7 +184,7 @@ _run_command_and_store_result() {
     OUTPUTS+=("$OUTPUT")
   fi
 
-  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
+  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ] && [ -n "${OUTPUTS[-1]}" ]; then
     echo "${OUTPUTS[-1]}"
   fi
 
