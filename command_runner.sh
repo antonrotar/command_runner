@@ -155,8 +155,6 @@ _print_skipped() {
 _run_command_and_store_result() {
   local COMMAND="$1"
   local EXPECTED_STATUS_CODE="$2"
-  local STATUS_CODE=255
-  local OUTPUT=""
 
   if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
     RESULTS+=($COMMAND_SKIPPED)
@@ -169,23 +167,31 @@ _run_command_and_store_result() {
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
     eval "$COMMAND" "2>&1"
-    STATUS_CODE=$?
-  else
-    OUTPUT="$(eval "$COMMAND" "2>&1")"
-    STATUS_CODE=$?
 
-    if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
-      echo "$OUTPUT"
+    if [ "$?" -eq "$EXPECTED_STATUS_CODE" ]; then
+      RESULTS+=($COMMAND_PASSED)
+    else
+      RESULTS+=($COMMAND_FAILED)
     fi
 
+    OUTPUTS+=("")
+  else
+    OUTPUT="$(eval "$COMMAND" "2>&1")"
+
+    if [ "$?" -eq "$EXPECTED_STATUS_CODE" ]; then
+      RESULTS+=($COMMAND_PASSED)
+    else
+      RESULTS+=($COMMAND_FAILED)
+    fi
+
+    OUTPUTS+=("$OUTPUT")
   fi
 
-  OUTPUTS+=("$OUTPUT")
+  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
+    echo "${OUTPUTS[-1]}"
+  fi
 
-  if [ "$STATUS_CODE" -eq "$EXPECTED_STATUS_CODE" ]; then
-    RESULTS+=($COMMAND_PASSED)
-  else
-    RESULTS+=($COMMAND_FAILED)
+  if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ]; then
 
     if [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
       _print_colored "$NORMAL_LIGHT_YELLOW" "STOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS."
