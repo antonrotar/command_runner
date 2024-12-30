@@ -192,12 +192,10 @@ _run_command_and_store_result() {
   fi
 
   if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ]; then
-
     if [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
       _print_colored "$NORMAL_LIGHT_YELLOW" "STOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS."
       SKIP_REMAINING_COMMANDS=1
     fi
-
   fi
 
   return 0
