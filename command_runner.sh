@@ -160,6 +160,7 @@ _evaluate_and_store_result() {
 
   return 0
 }
+
 # This is the main function of the whole script.
 # Commands are executed here.
 # The output is printed given the different output options.
