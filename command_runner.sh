@@ -148,6 +148,18 @@ _print_skipped() {
   return 0
 }
 
+_evaluate_and_store_result() {
+  local STATUS_CODE=$1
+  local EXPECTED_STATUS_CODE=$2
+
+  if [ "$STATUS_CODE" -eq "$EXPECTED_STATUS_CODE" ]; then
+    RESULTS+=($COMMAND_PASSED)
+  else
+    RESULTS+=($COMMAND_FAILED)
+  fi
+
+  return 0
+}
 # This is the main function of the whole script.
 # Commands are executed here.
 # The output is printed given the different output options.
@@ -167,23 +179,11 @@ _run_command_and_store_result() {
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
     eval "$COMMAND" "2>&1"
-
-    if [ "$?" -eq "$EXPECTED_STATUS_CODE" ]; then
-      RESULTS+=($COMMAND_PASSED)
-    else
-      RESULTS+=($COMMAND_FAILED)
-    fi
-
+    _evaluate_and_store_result "$?" "$EXPECTED_STATUS_CODE"
     OUTPUTS+=("")
   else
     OUTPUT="$(eval "$COMMAND" "2>&1")"
-
-    if [ "$?" -eq "$EXPECTED_STATUS_CODE" ]; then
-      RESULTS+=($COMMAND_PASSED)
-    else
-      RESULTS+=($COMMAND_FAILED)
-    fi
-
+    _evaluate_and_store_result "$?" "$EXPECTED_STATUS_CODE"
     OUTPUTS+=("$OUTPUT")
   fi
 
