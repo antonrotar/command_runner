@@ -174,9 +174,7 @@ _run_command_and_store_result() {
   local COMMAND="$1"
   local EXPECTED_STATUS_CODE="$2"
 
-  if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
-    _skip_command_and_store_result
-  elif [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
+  if [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
@@ -193,13 +191,6 @@ _run_command_and_store_result() {
     echo "${OUTPUTS[-1]}"
   fi
 
-  if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ]; then
-    if [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
-      _print_colored "$NORMAL_LIGHT_YELLOW" "STOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS."
-      SKIP_REMAINING_COMMANDS=1
-    fi
-  fi
-
   return 0
 }
 
@@ -209,7 +200,20 @@ _command_runner_run_commands() {
 
   for i in "${!COMMANDS[@]}"; do
     _print_command "$NORMAL_CYAN" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
-    _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
+
+    if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
+      _skip_command_and_store_result
+    else
+      _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
+    fi
+
+    if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ]; then
+      if [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
+        _print_colored "$NORMAL_LIGHT_YELLOW" "STOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS."
+        SKIP_REMAINING_COMMANDS=1
+      fi
+    fi
+
   done
 
   return 0
