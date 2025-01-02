@@ -161,6 +161,11 @@ _evaluate_and_store_result() {
   return 0
 }
 
+_skip_command_and_store_result() {
+  RESULTS+=($COMMAND_SKIPPED)
+  OUTPUTS+=("")
+}
+
 # This is the main function of the whole script.
 # Commands are executed here.
 # The output is printed given the different output options.
@@ -170,8 +175,7 @@ _run_command_and_store_result() {
   local EXPECTED_STATUS_CODE="$2"
 
   if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
-    RESULTS+=($COMMAND_SKIPPED)
-    OUTPUTS+=("")
+    _skip_command_and_store_result
   elif [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
