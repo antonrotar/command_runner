@@ -173,19 +173,22 @@ _skip_command_and_store_result() {
 _run_command_and_store_result() {
   local COMMAND="$1"
   local EXPECTED_STATUS_CODE="$2"
+  local STATUS_CODE=0
 
   if [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
     eval "$COMMAND" "2>&1"
-    _evaluate_and_store_result "$?" "$EXPECTED_STATUS_CODE"
+    STATUS_CODE=$?
     OUTPUTS+=("")
   else
     OUTPUT="$(eval "$COMMAND" "2>&1")"
-    _evaluate_and_store_result "$?" "$EXPECTED_STATUS_CODE"
+    STATUS_CODE=$?
     OUTPUTS+=("$OUTPUT")
   fi
+
+  _evaluate_and_store_result "$STATUS_CODE" "$EXPECTED_STATUS_CODE"
 
   if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ] && [ -n "${OUTPUTS[-1]}" ]; then
     echo "${OUTPUTS[-1]}"
