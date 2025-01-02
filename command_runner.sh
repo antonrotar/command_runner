@@ -148,19 +148,6 @@ _print_skipped() {
   return 0
 }
 
-_evaluate_and_store_result() {
-  local STATUS_CODE=$1
-  local EXPECTED_STATUS_CODE=$2
-
-  if [ "$STATUS_CODE" -eq "$EXPECTED_STATUS_CODE" ]; then
-    RESULTS+=($COMMAND_PASSED)
-  else
-    RESULTS+=($COMMAND_FAILED)
-  fi
-
-  return 0
-}
-
 _skip_command_and_store_result() {
   RESULTS+=($COMMAND_SKIPPED)
   OUTPUTS+=("")
@@ -188,7 +175,11 @@ _run_command_and_store_result() {
     OUTPUTS+=("$OUTPUT")
   fi
 
-  _evaluate_and_store_result "$STATUS_CODE" "$EXPECTED_STATUS_CODE"
+  if [ "$STATUS_CODE" -eq "$EXPECTED_STATUS_CODE" ]; then
+    RESULTS+=($COMMAND_PASSED)
+  else
+    RESULTS+=($COMMAND_FAILED)
+  fi
 
   if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ] && [ -n "${OUTPUTS[-1]}" ]; then
     echo "${OUTPUTS[-1]}"
