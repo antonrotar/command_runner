@@ -190,7 +190,7 @@ _run_command_and_store_result() {
 }
 
 # Run all stored commands, print them and store the results.
-_command_runner_run_commands() {
+_run_commands() {
   _print_info "Running commands:"
 
   for i in "${!COMMANDS[@]}"; do
@@ -213,7 +213,7 @@ _command_runner_run_commands() {
 }
 
 # This function evaluates if any command has failed.
-_command_runner_evaluate() {
+_evaluate() {
   for RESULT in "${RESULTS[@]}"; do
     if [ "$RESULT" -eq "$COMMAND_FAILED" ]; then
       return 1
@@ -224,7 +224,7 @@ _command_runner_evaluate() {
 }
 
 # This function prints the output of all failed commands.
-_command_runner_print_errors() {
+_print_errors() {
   echo
   _print_info "Errors:"
 
@@ -252,7 +252,7 @@ _get_summary_message() {
 }
 
 # This function prints a summary over all executed commands.
-_command_runner_print_summary() {
+_print_summary() {
   echo
   _print_info "Results:"
 
@@ -311,10 +311,10 @@ command_runner_add_with_expectation() {
 command_runner_run() {
   _set_output_options $FUNCNAME "$@"
 
-  _command_runner_run_commands &&
-    _command_runner_print_errors &&
-    _command_runner_print_summary &&
-    _command_runner_evaluate
+  _run_commands &&
+    _print_errors &&
+    _print_summary &&
+    _evaluate
 
   RETURN_VALUE=$?
 
