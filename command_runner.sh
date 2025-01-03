@@ -313,14 +313,14 @@ command_runner_run() {
   _set_output_options $FUNCNAME "$@"
 
   _run_commands && _print_errors && _print_summary && _evaluate
-  local RETURN_VALUE=$?
+  local STATUS_CODE=$?
 
   # Reset results and outputs.
   # This enables calling command_runner_run multiple times if needed.
   RESULTS=()
   OUTPUTS=()
 
-  return $RETURN_VALUE
+  return $STATUS_CODE
 }
 
 # Use this function to skip remaining commands after first failure.
