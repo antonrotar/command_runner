@@ -316,7 +316,7 @@ command_runner_run() {
     _print_summary &&
     _evaluate
 
-  RETURN_VALUE=$?
+  local RETURN_VALUE=$?
 
   # Reset results and outputs.
   # This enables calling command_runner_run multiple times if needed.
