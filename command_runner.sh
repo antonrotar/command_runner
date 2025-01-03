@@ -335,6 +335,7 @@ command_runner_stop_on_failure() {
 
   return 0
 }
+
 # Use this function to disable colored output.
 command_runner_disable_colored_output() {
   if [ "$#" -ne 0 ]; then
