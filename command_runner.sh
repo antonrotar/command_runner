@@ -163,15 +163,16 @@ _run_command_and_store_result() {
   local EXPECTED_STATUS_CODE="$2"
   local STATUS_CODE=0
   local OUTPUT=""
+  local REDIRECT_STDERR_TO_STDOUT="2>&1" # Capture all outputs of executed commands.
 
   if [ "$CURRENT_OUTPUT" -eq "$STREAMED_OUTPUT" ]; then
     # This allows synchronous printing. This is helpful if you want to observe the progress of long running commands.
     # Ideally the output would still be stored in addition to printing it directly.
     # I didn't find a way to accomplish that unfortunately.
-    eval "$COMMAND" "2>&1"
+    eval "$COMMAND" "$REDIRECT_STDERR_TO_STDOUT"
     STATUS_CODE=$?
   else
-    OUTPUT="$(eval "$COMMAND" "2>&1")"
+    OUTPUT="$(eval "$COMMAND" "$REDIRECT_STDERR_TO_STDOUT")"
     STATUS_CODE=$?
 
     if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
