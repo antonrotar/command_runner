@@ -33,13 +33,13 @@
 #
 # Variables and states.
 COMMANDS=()               # Commands to be executed collected via the "add" functions.
-EXPECTED_RESULTS=()       # Optional expected return codes. 0 is set as default expectation.
+EXPECTED_STATUS_CODES=()  # Optional expected status codes. 0 is set as default expectation.
 SHOULD_STOP_ON_FAILURE=0  # Will stop execution after first failure. Per default all commands are executed.
 SKIP_REMAINING_COMMANDS=0 # Used to skip remaining commands.
-COMMAND_PASSED=0          # Status code for command if result was as expected.
-COMMAND_FAILED=1          # Status code for command if result was not as expected.
-COMMAND_SKIPPED=2         # Status code for command if command was skipped.
-RESULTS=()                # Status codes of the commands after execution.
+COMMAND_PASSED=0          # Result for command if status code was as expected.
+COMMAND_FAILED=1          # Result for command if status code was not as expected.
+COMMAND_SKIPPED=2         # Result for command if command was skipped.
+RESULTS=()                # Results of the commands after execution and evaluation.
 OUTPUTS=()                # Output logs of the commands after execution.
 
 # Output options
@@ -194,12 +194,12 @@ _run_commands() {
   _print_info "Running commands:"
 
   for i in "${!COMMANDS[@]}"; do
-    _print_command "$NORMAL_CYAN" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
+    _print_command "$NORMAL_CYAN" "${COMMANDS[$i]}" "${EXPECTED_STATUS_CODES[$i]}"
 
     if [ "$SKIP_REMAINING_COMMANDS" -eq 1 ]; then
       _skip_command_and_store_result
     else
-      _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
+      _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_STATUS_CODES[$i]}"
     fi
 
     if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ] && [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
@@ -230,7 +230,7 @@ _print_errors() {
 
   for i in "${!RESULTS[@]}"; do
     if [ "${RESULTS[$i]}" -eq "$COMMAND_FAILED" ]; then
-      _print_command "$NORMAL_RED" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}"
+      _print_command "$NORMAL_RED" "${COMMANDS[$i]}" "${EXPECTED_STATUS_CODES[$i]}"
       echo "${OUTPUTS[$i]}"
     fi
   done
@@ -257,7 +257,7 @@ _print_summary() {
   _print_info "Results:"
 
   for i in "${!RESULTS[@]}"; do
-    echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_RESULTS[$i]}") "$(_get_summary_message "${RESULTS[$i]}")"
+    echo -e $(_print_command "$WHITE" "${COMMANDS[$i]}" "${EXPECTED_STATUS_CODES[$i]}") "$(_get_summary_message "${RESULTS[$i]}")"
   done
 
   return 0
@@ -275,7 +275,7 @@ command_runner_add() {
   fi
 
   COMMANDS+=("$1")
-  EXPECTED_RESULTS+=(0)
+  EXPECTED_STATUS_CODES+=(0)
 
   return 0
 }
@@ -292,7 +292,7 @@ command_runner_add_with_expectation() {
   fi
 
   COMMANDS+=("$1")
-  EXPECTED_RESULTS+=("$2")
+  EXPECTED_STATUS_CODES+=("$2")
 
   return 0
 }
