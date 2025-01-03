@@ -29,6 +29,17 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Usage
+#
+## source "$COMMAND_RUNNER_DIRECTORY/command_runner.sh"
+##
+## command_runner_add "echo Hello"
+## command_runner_add "echo World"
+##
+## command_runner_run
+#
+# For further details please check the "Public API" section of this script.
+
 # Implementation.
 #
 # Variables and states.
@@ -81,13 +92,11 @@ _set_output_options() {
   shift
 
   if [ "$#" -eq 1 ]; then
-    if [[ "$1" == '-v' ]]; then
-      command_runner_set_verbose_output
-    elif [[ "$1" == '-s' ]]; then
-      command_runner_set_streamed_output
-    else
-      _fail_contract $CALLING_FUNCTION "Unexpected argument. Please use -v or -s." "$@"
-    fi
+    case "$1" in
+    "-v") command_runner_set_verbose_output ;;
+    "-s") command_runner_set_streamed_output ;;
+    *) _fail_contract $CALLING_FUNCTION "Unexpected argument. Please use -v or -s." "$@" ;;
+    esac
   elif [ "$#" -gt 1 ]; then
     _fail_contract $CALLING_FUNCTION "Unexpected arguments. Please use -v or -s." "$@"
   fi
