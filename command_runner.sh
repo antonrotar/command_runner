@@ -172,6 +172,11 @@ _run_command_and_store_result() {
   else
     OUTPUT="$(eval "$COMMAND" "2>&1")"
     STATUS_CODE=$?
+
+    if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ] && [ -n "$OUTPUT" ]; then
+      echo "$OUTPUT"
+    fi
+
   fi
 
   if [ "$STATUS_CODE" -eq "$EXPECTED_STATUS_CODE" ]; then
@@ -181,10 +186,6 @@ _run_command_and_store_result() {
   fi
 
   OUTPUTS+=("$OUTPUT")
-
-  if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ] && [ -n "${OUTPUTS[-1]}" ]; then
-    echo "${OUTPUTS[-1]}"
-  fi
 
   return 0
 }
