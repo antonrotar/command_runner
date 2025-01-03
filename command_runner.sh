@@ -41,6 +41,7 @@ COMMAND_FAILED=1          # Result for command if status code was not as expecte
 COMMAND_SKIPPED=2         # Result for command if command was skipped.
 RESULTS=()                # Results of the commands after execution and evaluation.
 OUTPUTS=()                # Output logs of the commands after execution.
+RESULTING_STATUS_CODE=0   # Will be 0 if all commands passed and 1 if at least one command failed.
 
 # Output options
 COLORED_OUTPUT=1  # Use colors in command runner output.
@@ -184,6 +185,7 @@ _run_command_and_store_result() {
     RESULTS+=($COMMAND_PASSED)
   else
     RESULTS+=($COMMAND_FAILED)
+    RESULTING_STATUS_CODE=1 # Mark the overall result as FAILED.
   fi
 
   OUTPUTS+=("$OUTPUT")
@@ -207,17 +209,6 @@ _run_commands() {
     if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ] && [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
       _print_colored "$NORMAL_LIGHT_YELLOW" "STOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS."
       SKIP_REMAINING_COMMANDS=1
-    fi
-  done
-
-  return 0
-}
-
-# This function evaluates if any command has failed.
-_evaluate() {
-  for RESULT in "${RESULTS[@]}"; do
-    if [ "$RESULT" -eq "$COMMAND_FAILED" ]; then
-      return 1
     fi
   done
 
@@ -312,15 +303,14 @@ command_runner_add_with_expectation() {
 command_runner_run() {
   _set_output_options $FUNCNAME "$@"
 
-  _run_commands && _print_errors && _print_summary && _evaluate
-  local STATUS_CODE=$?
+  _run_commands && _print_errors && _print_summary
 
   # Reset results and outputs.
   # This enables calling command_runner_run multiple times if needed.
   RESULTS=()
   OUTPUTS=()
 
-  return $STATUS_CODE
+  return $RESULTING_STATUS_CODE
 }
 
 # Use this function to skip remaining commands after first failure.
