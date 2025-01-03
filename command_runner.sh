@@ -156,7 +156,6 @@ _skip_command_and_store_result() {
 # This is the main function of the whole script.
 # Commands are executed here.
 # The output is printed given the different output options.
-# The result is stored for later evaluation.
 _run_command_and_store_result() {
   local COMMAND="$1"
   local EXPECTED_STATUS_CODE="$2"
