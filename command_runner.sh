@@ -148,6 +148,8 @@ _print_skipped() {
   return 0
 }
 
+# Fill arrays with valid values even if command is skipped.
+# This way they will have a consistent size after execution.
 _skip_command_and_store_result() {
   RESULTS+=($COMMAND_SKIPPED)
   OUTPUTS+=("")
@@ -225,7 +227,7 @@ _evaluate() {
 
 # This function prints the output of all failed commands.
 _print_errors() {
-  echo
+  echo # Empty line for better readability.
   _print_info "Errors:"
 
   for i in "${!RESULTS[@]}"; do
@@ -253,7 +255,7 @@ _get_summary_message() {
 
 # This function prints a summary over all executed commands.
 _print_summary() {
-  echo
+  echo # Empty line for better readability.
   _print_info "Results:"
 
   for i in "${!RESULTS[@]}"; do
