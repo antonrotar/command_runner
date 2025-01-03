@@ -178,7 +178,6 @@ _run_command_and_store_result() {
     if [ "$CURRENT_OUTPUT" -eq "$VERBOSE_OUTPUT" ]; then
       echo "$OUTPUT"
     fi
-
   fi
 
   if [ "$STATUS_CODE" -eq "$EXPECTED_STATUS_CODE" ]; then
@@ -209,7 +208,6 @@ _run_commands() {
       _print_colored "$NORMAL_LIGHT_YELLOW" "STOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS."
       SKIP_REMAINING_COMMANDS=1
     fi
-
   done
 
   return 0
@@ -314,11 +312,7 @@ command_runner_add_with_expectation() {
 command_runner_run() {
   _set_output_options $FUNCNAME "$@"
 
-  _run_commands &&
-    _print_errors &&
-    _print_summary &&
-    _evaluate
-
+  _run_commands && _print_errors && _print_summary && _evaluate
   local RETURN_VALUE=$?
 
   # Reset results and outputs.
