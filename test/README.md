@@ -1,4 +1,8 @@
 ### Tests
+The `command_runner` was developed in a test-driven approach. 
+If you want to contribute or change anything for your local needs, please run all tests as described below.
+If you change a feature or add a new one, please adapt the tests accordingly.
+
 Each test is a standalone executable script which returns 0 if it passes and 1 if it fails.
 
 Each test script contains the most relevant part in its name and ends with `_test.sh`.
