@@ -29,7 +29,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Usage
+# Usage.
 #
 ## source "$COMMAND_RUNNER_DIRECTORY/command_runner.sh"
 ##
@@ -54,14 +54,14 @@ RESULTS=()                # Results of the commands after execution and evaluati
 OUTPUTS=()                # Output logs of the commands after execution.
 RESULTING_STATUS_CODE=0   # Will be 0 if all commands passed and 1 if at least one command failed.
 
-# Output options
+# Output options.
 COLORED_OUTPUT=1  # Use colors in command runner output.
 REGULAR_OUTPUT=0  # Print failed command outputs only.
 VERBOSE_OUTPUT=1  # Print all command outputs AFTER execution.
 STREAMED_OUTPUT=2 # Print all command outputs DURING execution.
 CURRENT_OUTPUT=$REGULAR_OUTPUT
 
-# Color codes
+# Color codes.
 WHITE="0;0"
 NORMAL_RED="0;31"
 BOLD_RED="1;31"
