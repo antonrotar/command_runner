@@ -15,6 +15,6 @@ command_runner_add another_passing_command
 OUTPUT=$(command_runner_run)
 
 expect_failure $?
-expect_log_contains "$(extract_logs "$OUTPUT")" "passing_command\nfailing_command\nSTOP ON FAILURE ENABLED. SKIPPING REMAINING COMMANDS.\nfailing_command\nanother_passing_command"
+expect_log_contains "$(extract_logs "$OUTPUT")" "passing_command\nfailing_command\nCOMMAND FAILED AND STOP ON FAILURE IS ENABLED. SKIPPING REMAINING COMMANDS.\nfailing_command\nanother_passing_command"
 expect_log_contains "$(extract_errors "$OUTPUT")" "failing_command\nOutput from failing command"
 expect_log_contains "$(extract_results "$OUTPUT")" "passing_command PASSED\nfailing_command FAILED\nfailing_command SKIPPED\nanother_passing_command SKIPPED"
