@@ -24,14 +24,14 @@ An example could look like:
 source "$COMMAND_RUNNER_DIRECTORY/command_runner.sh"
 
 # Add commands like you would run them in the command line.
-command_runner_add "./scripts/check_clang_format.sh"
-command_runner_add "bazel build //..."
-command_runner_add "bazel test //..."
-command_runner_add "bazel test --config=sanitizer //..."
+cra "./scripts/check_clang_format.sh"
+cra "bazel build //..."
+cra "bazel test //..."
+cra "bazel test --config=sanitizer //..."
 
 # Run commands.
 # Passing "$@" is not required, but helpful to run the whole script with [-v, -s].
-command_runner_run "$@"
+crr "$@"
 ```
 If all commands pass, a short summary will be printed and the return value will be 0:
 ```
@@ -91,15 +91,15 @@ FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/$FONT_VERSIO
 command_runner_stop_on_failure
 
 # Add commands like you would run them in the command line.
-command_runner_add "mkdir -p $FONTS_DIRECTORY"
-command_runner_add "wget $FONT_URL"
-command_runner_add "unzip -o $FONT_ARCHIVE -d $FONTS_DIRECTORY"
-command_runner_add "rm $FONT_ARCHIVE"
-command_runner_add "fc-cache -fv"
+cra "mkdir -p $FONTS_DIRECTORY"
+cra "wget $FONT_URL"
+cra "unzip -o $FONT_ARCHIVE -d $FONTS_DIRECTORY"
+cra "rm $FONT_ARCHIVE"
+cra "fc-cache -fv"
 
 # Run commands.
 # Passing "$@" is not required, but helpful to run the whole script with [-v, -s].
-command_runner_run "$@"
+crr "$@"
 ```
 If all commands pass, a short summary will be printed and the return value will be 0:
 ```
