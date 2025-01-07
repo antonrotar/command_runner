@@ -2,9 +2,12 @@
 [![CI Status](https://github.com/antonrotar/command_runner/actions/workflows/ci.yml/badge.svg)](https://github.com/antonrotar/command_runner/actions/workflows/ci.yml)
 
 This is a small bash library called `command_runner`.
-- It can run a list of commands in a script and report the results.
-- It provides a simple API and some output options.
-- It is thoroughly tested.
+It can run a list of commands in a script and report the results.
+In comparison to using a plain bash script you have a better control over execution and printing.
+Per default only the outputs of the failed commands will be printed, the rest will only be summarized.
+You can decide if you want to run all commands even if some failed or if you want to stop after first failure.
+The report will in any case contain all configured commands with their respective execution status.
+The overall status code will be propagated consistently which enables the usage of the `command_runner` in the scope of a larger tooling setup.
 
 Next steps:
 - Example use cases are [Use as a local CI](#use-as-a-local-ci) and [Use as an installation script](#use-as-an-installation-script)
