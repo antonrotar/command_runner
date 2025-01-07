@@ -159,6 +159,9 @@ command_runner_add "ls -l"
 ```
 The command is expected to return 0 to be counted as PASSED.
 
+#### cra
+Short alias for `command_runner_add`. Improves brevity and focus on the commands at hand.
+
 #### command_runner_add_with_expectation
 Use this function the same way as `command_runner_add` but with an additional expected return value.
 Use it if you expect a command to fail, but want to count it as PASSED nevertheless.
@@ -187,6 +190,9 @@ command_runner_run -s
 will run all commands with streamed output settings.
 In all cases all failed commands and a summary will be printed.
 The return value will be 0 if all commands passed and 1 if at least one command failed.
+
+#### crr
+Short alias for `command_runner_run`. Improves brevity and focus on the commands at hand.
 
 #### command_runner_stop_on_failure
 Use this function to skip remaining commands after first failure.

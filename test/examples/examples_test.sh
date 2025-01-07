@@ -19,8 +19,11 @@ expect_failure $?
 "$EXAMPLES_DIRECTORY/05_stop_on_failure_example.sh" >/dev/null
 expect_failure $?
 
+"$EXAMPLES_DIRECTORY/06_short_aliases_example.sh" >/dev/null
+expect_failure $?
+
 # Simple smoke test that all examples have a corresponding test.
-NUMBER_OF_TESTS=5
+NUMBER_OF_TESTS=6
 NUMBER_OF_EXAMPLES=$(ls $EXAMPLES_DIRECTORY/*.sh | wc -l)
 if [ "$NUMBER_OF_TESTS" -ne "$NUMBER_OF_EXAMPLES" ]; then
   echo "Number of tests ($NUMBER_OF_TESTS) does not match number of examples ($NUMBER_OF_EXAMPLES)."

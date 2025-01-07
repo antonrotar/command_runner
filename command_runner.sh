@@ -289,6 +289,11 @@ command_runner_add() {
   return 0
 }
 
+# Short alias for command_runner_add.
+cra() {
+  command_runner_add "$@"
+}
+
 # Use this function the same way as command_runner_add but with an additional expected return value.
 # Use it if you expect a command to fail, but want to count it as PASSED nevertheless.
 # This is useful to temporarily accept failing commands but still run them
@@ -326,6 +331,11 @@ command_runner_run() {
   _run_commands && _print_errors && _print_summary
 
   return $RESULTING_STATUS_CODE
+}
+
+# Short alias for command_runner_run.
+crr() {
+  command_runner_run "$@"
 }
 
 # Use this function to skip remaining commands after first failure.
