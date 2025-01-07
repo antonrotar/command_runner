@@ -10,12 +10,12 @@ The report will in any case contain all configured commands with their respectiv
 The overall status code will be propagated consistently which enables the usage of the `command_runner` in the scope of a larger tooling setup.
 
 Next steps:
-- Example use cases are [Use as a local CI](#use-as-a-local-ci) and [Use as an installation script](#use-as-an-installation-script)
+- Example use cases are [Use as a simple CI](#use-as-a-simple-ci) and [Use as an installation script](#use-as-an-installation-script)
 - Executable examples can be found under [examples](./examples/)
 - Tests can be found under [test](./test/)
 - [API Reference](#api-reference)
 
-### Use as a local CI
+### Use as a simple CI
 In most projects you will want to run some commands repeatedly. Like run linters, build, deploy, test your software, etc.
 The `command_runner` provides you with a simple API to collect these commands in a single script and have a nice report after execution.
 
