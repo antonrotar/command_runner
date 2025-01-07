@@ -1,5 +1,5 @@
 ## Command Runner
-![CI Status](https://github.com/antonrotar/command_runner/actions/workflows/ci.yml/badge.svg)
+[![CI Status](https://github.com/antonrotar/command_runner/actions/workflows/ci.yml/badge.svg)](https://github.com/antonrotar/command_runner/actions/workflows/ci.yml)
 
 This is a small bash library called `command_runner`.
 - It can run a list of commands in a script and report the results.
