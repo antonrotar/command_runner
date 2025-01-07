@@ -17,6 +17,6 @@ cra "echo Output from passing command"
 # Run commands. The overall result will be negative.
 # Pass "$@" to the run function. It allows to run the whole
 # example script like
-# ./02_failing_example.sh -v
+# ./06_short_aliases_example.sh -v
 # to change output options and observe the results.
 crr "$@"
