@@ -318,16 +318,14 @@ command_runner_add_with_expectation() {
 # In all cases all failed commands and a summary will be printed.
 # The return value will be 0 if all commands passed and 1 if at least one command failed.
 command_runner_run() {
+  # Resetting states enables calling command_runner_run multiple times if needed.
+  _reset_states
+
   _set_output_options $FUNCNAME "$@"
 
   _run_commands && _print_errors && _print_summary
 
-  # Reset states.
-  # This enables calling command_runner_run multiple times if needed.
-  local STATUS_CODE=$RESULTING_STATUS_CODE
-  _reset_states
-
-  return $STATUS_CODE
+  return $RESULTING_STATUS_CODE
 }
 
 # Use this function to skip remaining commands after first failure.
