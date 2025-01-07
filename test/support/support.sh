@@ -160,3 +160,15 @@ failing_command_that_prints_to_stderr() {
 arbitrary_command() {
   passing_command
 }
+
+INJECTED_STATUS_CODE=0
+
+inject_status_code() {
+  _assert_argument_count $FUNCNAME 1 $#
+
+  INJECTED_STATUS_CODE=$1
+}
+
+command_with_status_code_injection() {
+  return $INJECTED_STATUS_CODE
+}
