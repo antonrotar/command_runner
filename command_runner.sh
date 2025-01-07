@@ -319,6 +319,7 @@ command_runner_add_with_expectation() {
 # The return value will be 0 if all commands passed and 1 if at least one command failed.
 command_runner_run() {
   # Resetting states enables calling command_runner_run multiple times if needed.
+  _reset_states
 
   _set_output_options $FUNCNAME "$@"
 
