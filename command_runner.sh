@@ -318,6 +318,7 @@ command_runner_run() {
   # This enables calling command_runner_run multiple times if needed.
   RESULTS=()
   OUTPUTS=()
+  SKIP_REMAINING_COMMANDS=0
 
   return $RESULTING_STATUS_CODE
 }
