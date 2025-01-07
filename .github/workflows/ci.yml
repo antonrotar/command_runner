@@ -1,4 +1,4 @@
-name: CI
+name: Run all tests
 
 on:
   push:
