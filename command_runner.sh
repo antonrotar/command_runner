@@ -72,6 +72,14 @@ NORMAL_LIGHT_YELLOW="0;93"
 
 # Private functions.
 #
+# Helper function to reset states. Make sure all states accumulated in command_runner_run are reset.
+_reset_states() {
+  RESULTS=()
+  OUTPUTS=()
+  SKIP_REMAINING_COMMANDS=0
+  RESULTING_STATUS_CODE=0
+}
+
 # Helper function for contract guard clause. Prints error log and exits the script.
 _fail_contract() {
   local FUNCTION_NAME="$1"
@@ -316,11 +324,8 @@ command_runner_run() {
 
   # Reset states.
   # This enables calling command_runner_run multiple times if needed.
-  RESULTS=()
-  OUTPUTS=()
-  SKIP_REMAINING_COMMANDS=0
   local STATUS_CODE=$RESULTING_STATUS_CODE
-  RESULTING_STATUS_CODE=0
+  _reset_states
 
   return $STATUS_CODE
 }
