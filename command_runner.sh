@@ -314,13 +314,15 @@ command_runner_run() {
 
   _run_commands && _print_errors && _print_summary
 
-  # Reset results and outputs.
+  # Reset states.
   # This enables calling command_runner_run multiple times if needed.
   RESULTS=()
   OUTPUTS=()
   SKIP_REMAINING_COMMANDS=0
+  local STATUS_CODE=$RESULTING_STATUS_CODE
+  RESULTING_STATUS_CODE=0
 
-  return $RESULTING_STATUS_CODE
+  return $STATUS_CODE
 }
 
 # Use this function to skip remaining commands after first failure.
