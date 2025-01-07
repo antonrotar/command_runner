@@ -175,19 +175,19 @@ The command is expected to return the given value to be counted as PASSED.
 #### command_runner_run
 Use this function to run the previously added commands.
 Commands will be executed in the order they were added.
-The exact logging behavior depends on the output settings:
+The exact logging behavior depends on the output settings.
+To run the commands with the default output setting (only the output of failed commands will be printed) use:
 ```bash
 command_runner_run
 ```
-will run all commands with default output settings.
+To run the commands with the verbose output setting (all outputs will be printed) use:
 ```bash
 command_runner_run -v
 ```
-will run all commands with verbose output settings.
+To run the commands with the streamed output setting (all outputs will be printed during execution) use:
 ```bash
 command_runner_run -s
 ```
-will run all commands with streamed output settings.
 In all cases all failed commands and a summary will be printed.
 The return value will be 0 if all commands passed and 1 if at least one command failed.
 
