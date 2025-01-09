@@ -24,10 +24,15 @@ An example could look like:
 # my_project_ci.sh
 
 # Import command runner script.
-source "$COMMAND_RUNNER_DIRECTORY/command_runner.sh"
+SCRIPT_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIRECTORY/../command_runner/command_runner.sh"
+
+# Add the following line if you want to stop on first failure
+# and skip all remaining commands:
+# command_runner_stop_on_failure
 
 # Add commands like you would run them in the command line.
-cra "./scripts/check_clang_format.sh"
+cra "$SCRIPT_DIRECTORY/check_clang_format.sh"
 cra "bazel build //..."
 cra "bazel test //..."
 cra "bazel test --config=sanitizer //..."
