@@ -42,40 +42,17 @@ cra "bazel test --config=sanitizer //..."
 crr "$@"
 ```
 If all commands pass, a short summary will be printed and the return value will be 0:
-```
-Running commands:
-./scripts/check_clang_format.sh
-bazel build //...
-bazel test //...
-bazel test --config=sanitizer //...
 
-Errors:
+![All commands pass](./docs/all_passing.png?raw=true)
 
-Results:
-./scripts/check_clang_format.sh PASSED
-bazel build //... PASSED
-bazel test //... PASSED
-bazel test --config=sanitizer //... PASSED
-```
 If any command fails, the output of this command will be printed in the `Errors` section and the return value will be 1:
-```
-Running commands:
-./scripts/check_clang_format.sh
-bazel build //...
-bazel test //...
-bazel test --config=sanitizer //...
 
-Errors:
-./scripts/check_clang_format.sh
-File main.cpp does not comply with the given clang-format rules.
+![Commands fail and continue](./docs/failing_and_continue.png?raw=true)
 
-Results:
-./scripts/check_clang_format.sh FAILED
-bazel build //... PASSED
-bazel test //... PASSED
-bazel test --config=sanitizer //... PASSED
-```
-The actual output will be better readable using different colors. Unfortunately it is impossible to demonstrate that in a github README.
+Per default all commands are executed. If you want to stop on first failure and skip the remaining commands,
+please add `command_runner_stop_on_failure` to your script. The output will then be:
+
+![Commands fail and stop](./docs/failing_and_stop.png?raw=true)
 
 The verbosity can be configured, please check the [API Reference](#api-reference).
 
