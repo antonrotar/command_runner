@@ -223,9 +223,11 @@ _run_commands() {
       _run_command_and_store_result "${COMMANDS[$i]}" "${EXPECTED_STATUS_CODES[$i]}"
     fi
 
-    if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ] && [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
-      _print_colored "$NORMAL_LIGHT_YELLOW" "COMMAND FAILED AND STOP ON FAILURE IS ENABLED. SKIPPING REMAINING COMMANDS."
-      SKIP_REMAINING_COMMANDS=1
+    if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ]; then
+      if [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
+        _print_colored "$NORMAL_LIGHT_YELLOW" "COMMAND FAILED AND STOP ON FAILURE IS ENABLED. SKIPPING REMAINING COMMANDS."
+        SKIP_REMAINING_COMMANDS=1
+      fi
     fi
   done
 
