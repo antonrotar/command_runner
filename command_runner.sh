@@ -51,7 +51,6 @@ COMMAND_FAILED=1         # Result for command if status code was not as expected
 COMMAND_SKIPPED=2        # Result for command if command was skipped.
 RESULTS=()               # Results of the commands after execution and evaluation.
 OUTPUTS=()               # Output logs of the commands after execution.
-RESULTING_STATUS_CODE=0  # Will be 0 if all commands passed and 1 if at least one command failed.
 
 # Output options.
 COLORED_OUTPUT=1  # Use colors in command runner output.
@@ -75,7 +74,6 @@ NORMAL_LIGHT_YELLOW="0;93"
 _reset_states() {
   RESULTS=()
   OUTPUTS=()
-  RESULTING_STATUS_CODE=0
 }
 
 # Helper function for contract guard clause. Prints error log and exits the script.
@@ -211,6 +209,7 @@ _run_command_and_store_result() {
 _run_commands() {
   _print_info "Running commands:"
 
+  local RESULTING_STATUS_CODE=0
   local SKIP_REMAINING_COMMANDS=0
 
   for i in "${!COMMANDS[@]}"; do
@@ -233,7 +232,7 @@ _run_commands() {
     fi
   done
 
-  return 0
+  return $RESULTING_STATUS_CODE
 }
 
 # This function prints the output of all failed commands.
@@ -336,6 +335,8 @@ command_runner_run() {
   _set_output_options $FUNCNAME "$@"
 
   _run_commands
+  local RESULTING_STATUS_CODE=$?
+
   _print_errors
   _print_summary
 
