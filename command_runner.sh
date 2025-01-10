@@ -335,7 +335,9 @@ command_runner_run() {
 
   _set_output_options $FUNCNAME "$@"
 
-  _run_commands && _print_errors && _print_summary
+  _run_commands
+  _print_errors
+  _print_summary
 
   return $RESULTING_STATUS_CODE
 }
