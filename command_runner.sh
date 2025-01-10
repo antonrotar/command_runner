@@ -200,7 +200,6 @@ _run_command_and_store_result() {
     RESULTS+=($COMMAND_PASSED)
   else
     RESULTS+=($COMMAND_FAILED)
-    RESULTING_STATUS_CODE=1 # Mark the overall result as FAILED.
   fi
 
   OUTPUTS+=("$OUTPUT")
@@ -224,6 +223,9 @@ _run_commands() {
     fi
 
     if [ "${RESULTS[-1]}" -eq "$COMMAND_FAILED" ]; then
+
+      RESULTING_STATUS_CODE=1 # Mark the overall result as FAILED.
+
       if [ "$SHOULD_STOP_ON_FAILURE" -eq 1 ]; then
         _print_colored "$NORMAL_LIGHT_YELLOW" "COMMAND FAILED AND STOP ON FAILURE IS ENABLED. SKIPPING REMAINING COMMANDS."
         SKIP_REMAINING_COMMANDS=1
