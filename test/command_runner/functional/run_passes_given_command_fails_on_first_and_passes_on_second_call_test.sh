@@ -15,5 +15,5 @@ OUTPUT=$(command_runner_run)
 
 expect_success $?
 expect_log_contains "$(extract_logs "$OUTPUT")" "command_with_status_code_injection"
-expect_log_empty "$(extract_errors "$OUTPUT")"
+expect_log_does_not_contain_error_section "$OUTPUT"
 expect_log_contains "$(extract_results "$OUTPUT")" "command_with_status_code_injection PASSED"

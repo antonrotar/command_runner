@@ -12,5 +12,5 @@ OUTPUT=$(command_runner_run)
 
 expect_success $?
 expect_log_contains "$(extract_logs "$OUTPUT")" "passing_command\nanother_passing_command"
-expect_log_empty "$(extract_errors "$OUTPUT")"
+expect_log_does_not_contain_error_section "$OUTPUT"
 expect_log_contains "$(extract_results "$OUTPUT")" "passing_command PASSED\nanother_passing_command PASSED"

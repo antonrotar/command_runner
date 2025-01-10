@@ -237,11 +237,17 @@ _run_commands() {
 
 # This function prints the output of all failed commands.
 _print_errors() {
-  echo # Empty line for better readability.
-  _print_info "Errors:"
+  local IS_HEADER_PRINTED=0
 
   for i in "${!RESULTS[@]}"; do
     if [ "${RESULTS[$i]}" -eq "$COMMAND_FAILED" ]; then
+      # Print header once if any error occurred.
+      if [ "$IS_HEADER_PRINTED" -ne 1 ]; then
+        echo # Empty line for better readability.
+        _print_info "Errors:"
+        IS_HEADER_PRINTED=1
+      fi
+
       _print_command "$NORMAL_RED" "${COMMANDS[$i]}" "${EXPECTED_STATUS_CODES[$i]}"
       echo "${OUTPUTS[$i]}"
     fi
