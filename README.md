@@ -10,7 +10,7 @@ The report will in any case contain all configured commands with their respectiv
 The overall status code will be propagated consistently which enables the usage of the `command_runner` in the scope of a larger tooling setup.
 
 Next steps:
-- Example use cases are [Use as a simple CI](#use-as-a-simple-ci) and [Use as an installation script](#use-as-an-installation-script)
+- Example use case is [Use as a simple CI](#use-as-a-simple-ci)
 - Executable examples can be found under [examples](./examples/)
 - Tests can be found under [test](./test/)
 - [API Reference](#api-reference)
@@ -56,84 +56,6 @@ please add `command_runner_stop_on_failure` to your script. The output will then
 
 Per default only the logs of failed commands will be printed, but the verbosity can be configured.
 Please check the [API Reference](#api-reference).
-
-### Use as an installation script
-The `command_runner` was developed for the CI use case. However, it can also be used to automate installation routines.
-
-An example could look like:
-```bash
-# install_ubuntu_mono_nerd_font.sh
-
-# Import command runner script.
-source "$COMMAND_RUNNER_DIRECTORY/command_runner.sh"
-
-FONTS_DIRECTORY="$HOME/.local/share/fonts"
-FONT_VERSION="v3.3.0"
-FONT_ARCHIVE="UbuntuMono.zip"
-FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/$FONT_VERSION/$FONT_ARCHIVE"
-
-# Tell command runner to stop on failure.
-# This will skip all subsequent commands should any command fail.
-command_runner_stop_on_failure
-
-# Add commands like you would run them in the command line.
-cra "mkdir -p $FONTS_DIRECTORY"
-cra "wget $FONT_URL"
-cra "unzip -o $FONT_ARCHIVE -d $FONTS_DIRECTORY"
-cra "rm $FONT_ARCHIVE"
-cra "fc-cache -fv"
-
-# Run commands.
-# Passing "$@" is not required, but helpful to run the whole script with [-v, -s].
-crr "$@"
-```
-If all commands pass, a short summary will be printed and the return value will be 0:
-```
-Running commands:
-mkdir -p /home/anton/.local/share/fonts
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/UbuntuMono.zip
-unzip -o UbuntuMono.zip -d /home/anton/.local/share/fonts
-rm UbuntuMono.zip
-fc-cache -fv
-
-Errors:
-
-Results:
-mkdir -p /home/anton/.local/share/fonts PASSED
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/UbuntuMono.zip PASSED
-unzip -o UbuntuMono.zip -d /home/anton/.local/share/fonts PASSED
-rm UbuntuMono.zip PASSED
-fc-cache -fv PASSED
-```
-If any command fails, the output of this command will be printed in the `Errors` section and the return value will be 1.
-In addition to that, since `command_runner_stop_on_failure` was set, all subsequent commands will be skipped:
-```
-Running commands:
-mkdir -p /home/anton/.local/share/fonts
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/UbuntuMono.zip
-COMMAND FAILED AND STOP ON FAILURE IS ENABLED. SKIPPING REMAINING COMMANDS.
-unzip -o UbuntuMono.zip -d /home/anton/.local/share/fonts
-rm UbuntuMono.zip
-fc-cache -fv
-
-Errors:
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/UbuntuMono.zip
---2025-01-04 23:59:25--  https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/UbuntuMono.zip
-Resolving github.com (github.com)... 140.82.121.3
-Connecting to github.com (github.com)|140.82.121.3|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2025-01-04 23:59:25 ERROR 404: Not Found.
-
-Results:
-mkdir -p /home/anton/.local/share/fonts PASSED
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/UbuntuMono.zip FAILED
-unzip -o UbuntuMono.zip -d /home/anton/.local/share/fonts SKIPPED
-rm UbuntuMono.zip SKIPPED
-fc-cache -fv SKIPPED
-```
-The actual output will be better readable using different colors. Unfortunately it is impossible to demonstrate that in a github README.
-
-The verbosity can be configured, please check the [API Reference](#api-reference).
 
 ### API Reference
 
