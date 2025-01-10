@@ -13,11 +13,11 @@ To execute all tests run:
 ```
 ./run_all_tests.sh
 ```
-To execute only tests in a particular directory execute for instance:
+To execute only tests in a particular directory run for instance:
 ```
 ./run_all_tests.sh ./command_runner/contract/
 ```
-To execute only one particular test execute for instance:
+To execute only one particular test run for instance:
 ```
 ./run_all_tests.sh ./command_runner/contract/add_fails_given_no_command_test.sh
 ```
