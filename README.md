@@ -10,12 +10,13 @@ The report will in any case contain all configured commands with their respectiv
 The overall status code will be propagated consistently which enables the usage of the `command_runner` in the scope of a larger tooling setup.
 
 Next steps:
-- Example use case is [Use as a simple CI](#use-as-a-simple-ci)
-- Executable examples can be found under [examples](./examples/)
-- Tests can be found under [test](./test/)
-- [API Reference](#api-reference)
+- Have a look at the [Example use case](#example-use-case).
+- If you want to try it out on your machine, you will find executable examples here: [examples](./examples/).
+- If you want to contribute or change anything for your local needs, please have a look at the tests here: [test](./test/).
+- Check out the [API Reference](#api-reference) for detailed information.
 
-### Use as a simple CI
+### Example use case
+The main motivation of developing this library was the usage as a simple CI.
 In most projects you will want to run some commands repeatedly. Like run linters, build, deploy, test your software, etc.
 The `command_runner` provides you with a simple API to collect these commands in a single script and have a nice report after execution.
 
@@ -32,12 +33,14 @@ source "$SCRIPT_DIRECTORY/../command_runner/command_runner.sh"
 # command_runner_stop_on_failure
 
 # Add commands like you would run them in the command line.
+# cra is an alias for command_runner_add.
 cra "$SCRIPT_DIRECTORY/check_clang_format.sh"
 cra "bazel build //..."
 cra "bazel test //..."
 cra "bazel test --config=sanitizer //..."
 
 # Run commands.
+# crr is an alias for command_runner_run.
 # Passing "$@" is not required, but helpful to run the whole script with [-v, -s].
 crr "$@"
 ```
