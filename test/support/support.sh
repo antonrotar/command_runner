@@ -6,6 +6,8 @@ source_command_runner() {
 
   # Disable colored output to allow exact string matching on output logs.
   command_runner_disable_colored_output
+
+  return 0
 }
 
 _assert_argument_count() {
@@ -134,6 +136,8 @@ _extract_specific_logs() {
       echo $LINE
     fi
   done <<<"$LOG"
+
+  return 0
 }
 
 extract_logs() {
@@ -142,6 +146,8 @@ extract_logs() {
   local LOG="$1"
 
   _extract_specific_logs "$LOG" "Running commands:" "Errors:" "Results:"
+
+  return 0
 }
 
 extract_errors() {
@@ -150,6 +156,8 @@ extract_errors() {
   local LOG="$1"
 
   _extract_specific_logs "$LOG" "Errors:" "Running commands:" "Results:"
+
+  return 0
 }
 
 extract_results() {
@@ -158,6 +166,8 @@ extract_results() {
   local LOG="$1"
 
   _extract_specific_logs "$LOG" "Results:" "Running commands:" "Errors:"
+
+  return 0
 }
 
 expect_log_does_not_contain_error_section() {
@@ -166,6 +176,8 @@ expect_log_does_not_contain_error_section() {
   local LOG="$1"
 
   expect_log_does_not_contain "$LOG" "Errors:"
+
+  return 0
 }
 
 passing_command() {
@@ -198,6 +210,8 @@ inject_status_code() {
   _assert_argument_count $FUNCNAME 1 $#
 
   INJECTED_STATUS_CODE=$1
+
+  return 0
 }
 
 command_with_status_code_injection() {
