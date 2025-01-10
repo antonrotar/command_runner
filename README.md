@@ -54,7 +54,8 @@ please add `command_runner_stop_on_failure` to your script. The output will then
 
 ![Commands fail and stop](./docs/failing_and_stop.png?raw=true)
 
-The verbosity can be configured, please check the [API Reference](#api-reference).
+Per default only the logs of failed commands will be printed, but the verbosity can be configured.
+Please check the [API Reference](#api-reference).
 
 ### Use as an installation script
 The `command_runner` was developed for the CI use case. However, it can also be used to automate installation routines.
