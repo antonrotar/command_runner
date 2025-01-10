@@ -43,16 +43,15 @@
 # Implementation.
 #
 # Variables and states.
-COMMANDS=()               # Commands to be executed collected via the "add" functions.
-EXPECTED_STATUS_CODES=()  # Optional expected status codes. 0 is set as default expectation.
-SHOULD_STOP_ON_FAILURE=0  # Will stop execution after first failure. Per default all commands are executed.
-SKIP_REMAINING_COMMANDS=0 # Used to skip remaining commands.
-COMMAND_PASSED=0          # Result for command if status code was as expected.
-COMMAND_FAILED=1          # Result for command if status code was not as expected.
-COMMAND_SKIPPED=2         # Result for command if command was skipped.
-RESULTS=()                # Results of the commands after execution and evaluation.
-OUTPUTS=()                # Output logs of the commands after execution.
-RESULTING_STATUS_CODE=0   # Will be 0 if all commands passed and 1 if at least one command failed.
+COMMANDS=()              # Commands to be executed collected via the "add" functions.
+EXPECTED_STATUS_CODES=() # Optional expected status codes. 0 is set as default expectation.
+SHOULD_STOP_ON_FAILURE=0 # Will stop execution after first failure. Per default all commands are executed.
+COMMAND_PASSED=0         # Result for command if status code was as expected.
+COMMAND_FAILED=1         # Result for command if status code was not as expected.
+COMMAND_SKIPPED=2        # Result for command if command was skipped.
+RESULTS=()               # Results of the commands after execution and evaluation.
+OUTPUTS=()               # Output logs of the commands after execution.
+RESULTING_STATUS_CODE=0  # Will be 0 if all commands passed and 1 if at least one command failed.
 
 # Output options.
 COLORED_OUTPUT=1  # Use colors in command runner output.
@@ -76,7 +75,6 @@ NORMAL_LIGHT_YELLOW="0;93"
 _reset_states() {
   RESULTS=()
   OUTPUTS=()
-  SKIP_REMAINING_COMMANDS=0
   RESULTING_STATUS_CODE=0
 }
 
@@ -213,6 +211,8 @@ _run_command_and_store_result() {
 # Run all stored commands, print them and store the results.
 _run_commands() {
   _print_info "Running commands:"
+
+  local SKIP_REMAINING_COMMANDS=0
 
   for i in "${!COMMANDS[@]}"; do
     _print_command "$NORMAL_CYAN" "${COMMANDS[$i]}" "${EXPECTED_STATUS_CODES[$i]}"
