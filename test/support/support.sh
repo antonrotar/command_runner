@@ -62,24 +62,36 @@ expect_log_empty() {
   return 0
 }
 
+_expect_log() {
+  _assert_argument_count $FUNCNAME 4 $#
+
+  local LOG="$1"
+  local EXPECTED_LOG="$2"
+  local EXPECTED_GREP_STATUS_CODE="$3"
+  local ERROR_MESSAGE="$4"
+
+  # q prevents grep from printing the match, Pz is necessary for multiline matching.
+  # Reference: https://stackoverflow.com/questions/152708/how-can-i-search-for-a-multiline-pattern-in-a-file
+  echo "$LOG" | grep -qPz "$EXPECTED_LOG"
+
+  if [ "$?" -ne "$EXPECTED_GREP_STATUS_CODE" ]; then
+    echo "$ERROR_MESSAGE:"
+    echo -e "$EXPECTED_LOG"
+    echo "Actual log:"
+    echo -e "$LOG"
+    exit 1
+  fi
+
+  return 0
+}
+
 expect_log_contains() {
   _assert_argument_count $FUNCNAME 2 $#
 
   local LOG="$1"
   local EXPECTED_LOG="$2"
 
-  # q prevents grep from printing the match, Pz is necessary for multiline matching.
-  # Reference: https://stackoverflow.com/questions/152708/how-can-i-search-for-a-multiline-pattern-in-a-file
-  echo "$LOG" | grep -qPz "$EXPECTED_LOG"
-
-  # If grep finds a match the return value will be 0.
-  if [ "$?" -ne 0 ]; then
-    echo "Expected log contains:"
-    echo -e "$EXPECTED_LOG"
-    echo "Actual log:"
-    echo -e "$LOG"
-    exit 1
-  fi
+  _expect_log "$LOG" "$EXPECTED_LOG" 0 "Expected log contains"
 
   return 0
 }
@@ -90,18 +102,7 @@ expect_log_does_not_contain() {
   local LOG="$1"
   local EXPECTED_LOG="$2"
 
-  # q prevents grep from printing the match, Pz is necessary for multiline matching.
-  # Reference: https://stackoverflow.com/questions/152708/how-can-i-search-for-a-multiline-pattern-in-a-file
-  echo "$LOG" | grep -qPz "$EXPECTED_LOG"
-
-  # If grep finds a match the return value will be 0.
-  if [ "$?" -eq 0 ]; then
-    echo "Expected log does not contain:"
-    echo -e "$EXPECTED_LOG"
-    echo "Actual log:"
-    echo -e "$LOG"
-    exit 1
-  fi
+  _expect_log "$LOG" "$EXPECTED_LOG" 1 "Expected log does not contain"
 
   return 0
 }
